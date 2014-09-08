@@ -99,13 +99,26 @@ public class MyPatientQueue{
 	
 	/**
 	 * copy the array elements into a new, larger array and store the new array as the patientArray
+	 * @param decreaseArraySize - variable determining whether you shrink the array or grow it
 	 */
-	private void increaseArraySize() {
-		Patient[] newPatientArray = new Patient[patientArray.length * 2];
+	private void changeArraySize(boolean decreaseArraySize) {
+		// Protect against shrinking the array when it is too small so that it this condition doesn't need to
+		// be checked in other places in the code
+		if (decreaseArraySize && patientArray.length <= 7)
+			return;
+		
+		Patient[] newPatientArray;
+		if (decreaseArraySize) {
+			// Don't allow the array size to become less than 7
+			newPatientArray = new Patient[patientArray.length / 2 > 7 ? patientArray.length / 2 : 7];
+		}
+		else {
+			newPatientArray = new Patient[patientArray.length * 2];
+		}
 		
 		// Copy the contents of the patient array into the new patient array
 		int i;
-		for (i = 0; i < patientArray.length; ++head, ++i) {
+		for (i = 0; i < numOfPatients; ++head, ++i) {
 			// Call modulus operation to account for when head increments outside the length of the array
 			head = head % patientArray.length;
 			newPatientArray[i] = patientArray[head];
@@ -117,3 +130,5 @@ public class MyPatientQueue{
 		patientArray = newPatientArray;
 	}
 }
+
+
