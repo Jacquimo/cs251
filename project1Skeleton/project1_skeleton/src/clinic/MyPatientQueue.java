@@ -3,7 +3,7 @@ package clinic;
 /**
  * A Patient queue implementation using a dynamically-sized circular array.
  * 
- * @author TODO
+ * @author ghousto
  */
 public class MyPatientQueue{
 	// instance variables

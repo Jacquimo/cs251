@@ -3,19 +3,25 @@ package clinic;
 /**
  * A class representing a patient.
  * 
- * @author TODO
+ * @author ghousto
  */
 public class Patient {
 	// instance variables
 	// TODO ATTENTION: CODE NEEDED HERE
 	// declare instance variables
 	// -----
+	private String name;
+	private int arrivalTime;
+	private int urgency;
 	
 	// constructor
 	public Patient(String name, int arrival_time, int urgency) {
 		// TODO ATTENTION: CODE NEEDED HERE
 		// initialize instance variables
 		// -----
+		this.name = name;
+		this.arrivalTime = arrival_time;
+		this.urgency = urgency;
 	}
 	
 	// functions
@@ -25,7 +31,7 @@ public class Patient {
 	public int arrival_time() {
 		// TODO ATTENTION: CODE NEEDED HERE
 		// return this patient's arrival time
-		return -1;
+		return arrivalTime;
 		// -----
 	}
 	
@@ -35,7 +41,7 @@ public class Patient {
 	public int urgency() {
 		// TODO ATTENTION: CODE NEEDED HERE
 		// return this patient's urgency
-		return -1;
+		return urgency;
 		//-----
 	}
 	
@@ -46,7 +52,7 @@ public class Patient {
 	public int wait_time(int time){
 		// TODO ATTENTION: CODE NEEDED HERE
 		// return this patient's wait time
-		return -1;
+		return time - arrivalTime;
 		// -----
 	}
 }
