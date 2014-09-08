@@ -10,12 +10,20 @@ public class MyPatientQueue{
 	// TODO ATTENTION: CODE NEEDED HERE
 	// declare instance variables
 	// -----
+	private Patient[] patientArray;
+	private int head;
+	private int tail;
+	private int numOfPatients;
 
 	// constructor
 	public MyPatientQueue() {
 		// TODO ATTENTION: CODE NEEDED HERE
 		// initialize instance variables
 		// -----
+		patientArray = new Patient[7];
+		head = 0;
+		tail = 0;
+		numOfPatients = 0;
 	}
 
 	// functions
@@ -25,7 +33,7 @@ public class MyPatientQueue{
 	public int size() {
 		// TODO ATTENTION: CODE NEEDED HERE
 		// return the number of patients in the queue
-		return -1;
+		return numOfPatients;
 		// -----
 	}
 
@@ -87,5 +95,25 @@ public class MyPatientQueue{
 		// resize array, if needed
 		return null;
 		// -----
+	}
+	
+	/**
+	 * copy the array elements into a new, larger array and store the new array as the patientArray
+	 */
+	private void increaseArraySize() {
+		Patient[] newPatientArray = new Patient[patientArray.length * 2];
+		
+		// Copy the contents of the patient array into the new patient array
+		int i;
+		for (i = 0; i < patientArray.length; ++head, ++i) {
+			// Call modulus operation to account for when head increments outside the length of the array
+			head = head % patientArray.length;
+			newPatientArray[i] = patientArray[head];
+		}
+		
+		// Reset the head & tail variables to point to the correct indices and reassign the patient array
+		head = 0;
+		tail = i;
+		patientArray = newPatientArray;
 	}
 }
