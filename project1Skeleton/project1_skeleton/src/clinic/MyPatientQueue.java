@@ -7,7 +7,6 @@ package clinic;
  */
 public class MyPatientQueue{
 	// instance variables
-	// TODO ATTENTION: CODE NEEDED HERE
 	// declare instance variables
 	// -----
 	private Patient[] patientArray;
@@ -17,7 +16,6 @@ public class MyPatientQueue{
 
 	// constructor
 	public MyPatientQueue() {
-		// TODO ATTENTION: CODE NEEDED HERE
 		// initialize instance variables
 		// -----
 		patientArray = new Patient[7];
@@ -31,7 +29,6 @@ public class MyPatientQueue{
 	 * @return the number of patients in the queue
 	 */
 	public int size() {
-		// TODO ATTENTION: CODE NEEDED HERE
 		// return the number of patients in the queue
 		return numOfPatients;
 		// -----
@@ -42,10 +39,17 @@ public class MyPatientQueue{
 	 * @param p - Patient to add to queue
 	 */
 	public void enqueue(Patient p) {
-		// TODO ATTENTION: CODE NEEDED HERE
 		// add patient to end of queue
 		// resize array, if needed
 		// -----
+		
+		patientArray[tail++] = p;
+		tail %= patientArray.length;
+		++numOfPatients;
+		
+		// If head == tail during an enqueue, then the array must be full and must be resized
+		if (head == tail || numOfPatients == patientArray.length)
+			changeArraySize(false);
 	}
 
 	/**
