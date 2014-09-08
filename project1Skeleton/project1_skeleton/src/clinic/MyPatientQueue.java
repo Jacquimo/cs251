@@ -57,11 +57,18 @@ public class MyPatientQueue{
 	 * @return patient at front of queue, null if queue is empty
 	 */
 	public Patient dequeue() {
-		// TODO ATTENTION: CODE NEEDED HERE
 		// remove and return the patient at the head of the queue
 		// resize array, if needed
-		return null;
-		// -----
+		
+		Patient patientToReturn = patientArray[head++];
+		head %= patientArray.length;
+		--numOfPatients;
+		
+		// If the number of patients is <= 1/4th the size of the patient array, resize it
+		if (numOfPatients <= patientArray.length / 4)
+			changeArraySize(true);
+		
+		return patientToReturn;
 	}
 
 	/**
