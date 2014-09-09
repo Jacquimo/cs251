@@ -87,8 +87,13 @@ public class MyPatientQueue{
 	public Patient get(int i) {
 		// TODO ATTENTION: CODE NEEDED HERE
 		// return, but do not remove, the patient at index i
-		return null;
-		// -----
+
+		// if the index is outside of the bounds of the queue, adjusted for index being 0-based
+		if (i > numOfPatients - 1 || i < 0)
+			return null;
+		
+		int indexOfPatient = (head + i) % patientArray.length;
+		return patientArray[indexOfPatient];
 	}
 
 	/**
