@@ -60,6 +60,9 @@ public class MyPatientQueue{
 		// remove and return the patient at the head of the queue
 		// resize array, if needed
 		
+		if (numOfPatients == 0)
+			return null;
+		
 		Patient patientToReturn = patientArray[head++];
 		head %= patientArray.length;
 		--numOfPatients;
@@ -67,6 +70,11 @@ public class MyPatientQueue{
 		// If the number of patients is <= 1/4th the size of the patient array, resize it
 		if (numOfPatients <= patientArray.length / 4)
 			changeArraySize(true);
+		
+		if (numOfPatients == 0) {
+			head = 0;
+			tail = 0;
+		}
 		
 		return patientToReturn;
 	}
