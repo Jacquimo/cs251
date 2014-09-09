@@ -123,12 +123,46 @@ public class MyPatientQueue{
 	 * @return patient at index i, null if no such element
 	 */
 	public Patient dequeue(int i) {
-		// TODO ATTENTION: CODE NEEDED HERE
 		// remove and return Patient at index i from queue
 		// shift patients down to fill hole left by removed patient
 		// resize array, if needed
-		return null;
-		// -----
+		
+		// if the index is outside of the bounds of the queue, adjusted for index being 0-based
+		if (i > numOfPatients - 1 || i < 0)
+			return null;
+		
+		if (i == 0)
+			return dequeue();
+		
+		// don't use get method which I have already implemented because I need the index of the patient
+		int indexOfPatient = (head + i) % patientArray.length;
+		Patient patientToReturn = patientArray[indexOfPatient++];
+		--numOfPatients;
+		
+		// Roll all the patients to the left 1 index
+		while ((indexOfPatient % patientArray.length) != tail) { // handle case where the index is last element in array
+			indexOfPatient %= patientArray.length;
+			// use this math to handle case when indexOfPatient wraps around the array back to 0
+			int indexToFill = ((indexOfPatient - 1) % patientArray.length + patientArray.length) % patientArray.length;
+			patientArray[indexToFill] = patientArray[indexOfPatient];
+			++indexOfPatient;
+		}
+		
+		// move the tail to the left 1 index
+		tail = ((tail - 1) % patientArray.length + patientArray.length) % patientArray.length;
+		
+		// At this point, the logic should continue as if performing a standard dequeue operation
+		
+		// If the number of patients is <= 1/4th the size of the patient array, resize it
+		if (numOfPatients <= patientArray.length / 4)
+			changeArraySize(true);
+				
+		if (numOfPatients == 0) {
+			head = 0;
+			tail = 0;
+		}
+		
+		return patientToReturn;
 	}
 	
 	/**
