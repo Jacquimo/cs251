@@ -111,6 +111,10 @@ public class MyPatientQueue{
 	/**
 	 * copy the array elements into a new, larger array and store the new array as the patientArray
 	 * @param decreaseArraySize - variable determining whether you shrink the array or grow it
+	 * 
+	 * I only used a single method because the implementation for copying the array elements into the
+	 * new array was exactly the same for both shrinking and growing the array. The only difference
+	 * was the size of the new array.
 	 */
 	private void changeArraySize(boolean decreaseArraySize) {
 		// Protect against shrinking the array when it is too small so that it this condition doesn't need to
