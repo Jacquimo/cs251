@@ -96,10 +96,20 @@ public class MyPatientQueue{
 	 * @param p - patient being added to queue
 	 */
 	public void push(Patient p) {
-		// TODO ATTENTION: CODE NEEDED HERE
 		// add Patient p to front of queue
 		// resize array, if needed
 		// -----
+		
+		--head;
+		if (head < 0) // This case should only be hit when head = -1. Otherwise, the math will be off
+			head += patientArray.length;
+		patientArray[head] = p;
+		++numOfPatients;
+		
+		// If head == tail, head must have wrapped around to the end of the array and filled the last empty spot.
+		// Therefore, the array must be full and should be expanded
+		if (head == tail || numOfPatients == patientArray.length)
+			changeArraySize(false);
 	}
 
 	/**
