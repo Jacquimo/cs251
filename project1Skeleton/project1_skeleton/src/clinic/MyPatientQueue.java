@@ -85,7 +85,6 @@ public class MyPatientQueue{
 	 * @return patient at index i, or null if no such element
 	 */
 	public Patient get(int i) {
-		// TODO ATTENTION: CODE NEEDED HERE
 		// return, but do not remove, the patient at index i
 
 		// if the index is outside of the bounds of the queue, adjusted for index being 0-based
@@ -200,6 +199,10 @@ public class MyPatientQueue{
 		head = 0;
 		tail = i;
 		patientArray = newPatientArray;
+	}
+	
+	public boolean isEmpty() {
+		return numOfPatients < 1;
 	}
 }
 
