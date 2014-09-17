@@ -204,6 +204,14 @@ public class MyPatientQueue{
 	public boolean isEmpty() {
 		return numOfPatients < 1;
 	}
+	
+	/**
+	 * returns the head of the queue without dequeueing it
+	 * @return head of the queue without dequeueing it
+	 */
+	public Patient peek() {
+		return patientArray[head];
+	}
 }
 
 
