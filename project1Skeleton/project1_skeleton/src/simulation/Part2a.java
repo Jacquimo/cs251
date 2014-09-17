@@ -15,7 +15,7 @@ import static clinic.Parameters.num_doctors;
  * All doctors serve all queues.
  * Patients all join a single queue on arrival.
  * 
- * @author 
+ * @author ghousto
  *
  */
 
@@ -138,9 +138,10 @@ public class Part2a {
 	 * @param p - patient being admitted
 	 */
 	private static void process_patient(Patient p) {
-		// TODO ATTENTION: CODE NEEDED HERE
 		// put patient in the correct queue
 		// -----
+		
+		Q.enqueue(p);
 	}
 	// -----
 
