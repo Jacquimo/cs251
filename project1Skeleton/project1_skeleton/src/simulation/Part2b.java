@@ -147,9 +147,15 @@ public class Part2b {
 	 * @param p - patient being admitted
 	 */
 	private static void process_patient(Patient p) {
-		// TODO ATTENTION: CODE NEEDED HERE
 		// put patient in the correct queue
 		// -----
+		
+		switch(p.urgency()) {
+			case 1: Q[0].enqueue(p); break;
+			case 2: Q[1].enqueue(p); break;
+			case 3: Q[2].enqueue(p); break;
+			default: Q[3].enqueue(p); // If there is no specified/valid urgency, assume it's a Level 4
+		}
 	}
 	// -----
     
