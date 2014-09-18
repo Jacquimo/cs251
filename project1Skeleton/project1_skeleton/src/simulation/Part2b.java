@@ -19,7 +19,7 @@ import static clinic.Parameters.*;
  * Patients with emergencies see next available doctor.
  * Patients in Level 1 or 2 waiting 90 minutes promote to next level.
  *
- * @author TODO
+ * @author ghousto
  *
  */
 
