@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+<listEntry value="/Project1-Patient-Scheduler/src/simulation/Part2b.java"/>
+</listAttribute>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+<listEntry value="1"/>
+</listAttribute>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="simulation.Part2b"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-d ${string_prompt:&quot;Number of Doctors&quot;} &#10;-r ${string_prompt:&quot;Number of times to run the simulation&quot;} &#10;-e ${string_prompt:&quot;Propbability of an emergency&quot;} &#10;-D ${string_prompt:&quot;Delay/Wait after which Level 1 patients may walk out&quot;} &#10;-w ${string_prompt:&quot;Probability of a Level 1 to walk out after the specified delay&quot;}&#10;test_input.txt"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="Project1-Patient-Scheduler"/>
+</launchConfiguration>
