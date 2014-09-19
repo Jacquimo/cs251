@@ -1,3 +1,4 @@
 .metadata
 */__MACOSX
 *.class
+.~lock*
