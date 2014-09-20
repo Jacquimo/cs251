@@ -1,7 +1,11 @@
 package simulation;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -244,6 +248,7 @@ public class Part2a {
 	 * @param args - command line arguments<br>
 	 * [options] [input_file]<br>
 	 * default input file is "test_input.txt"
+	 * @throws IOException 
 	 */
 	public static void main(String[] args) {
 		// parse command line arguments
@@ -398,6 +403,19 @@ public class Part2a {
 		System.out.println();
 		System.out.printf("mean length of day: %.4f\n",mean_length_of_day);
 		
+		/*
+		BufferedWriter output = new BufferedWriter(new FileWriter("../2aOutput.txt", true));
+		for (int i = 0; i < 4; ++i) {
+			output.append((i + 1) + "\t");
+			output.append(mu_mean[i] + "\t");
+			output.append(mu_max[i] + "\t");
+			output.append(num_doctors + "\t");
+			output.append((mu_busyness * 100) + "\n");
+			output.newLine();
+		}
+		output.close();
+		*/
+
 	}
 	// -----
 }
