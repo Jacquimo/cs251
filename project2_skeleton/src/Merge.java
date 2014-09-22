@@ -2,11 +2,11 @@
 /**
  * General Merge Sort
  * 
- * TODO if this is an off-the-shelf implementation, cite where you got it from.
+ * TODO this code is from the implementation given in the lecture slides
  * 
- * @author TODO put your username here
- * @version TODO put the date here
- * @pso   TODO put your PSO section here
+ * @author ghousto
+ * @version 9/22/14
+ * @pso   P06
  *
  */
 public class Merge extends Sort {
@@ -20,6 +20,50 @@ public class Merge extends Sort {
 	 * @param a - array
 	 */
 	public static void sort(Comparable[] a) {
-		// TODO implement sort
+		mergesort(a, new Comparable[a.length], 0, a.length - 1);
 	}
+	
+	/**
+	 * 
+	 * @param a - the array
+	 * @param aux - the auxiliary helper array
+	 * @param left - starting index of left part of array to sort
+	 * @param right - starting index of right part of array to sort
+	 */
+	public static void mergesort(Comparable[] a, Comparable[] aux, int left, int right) {
+		if (right <= left) return;
+		int middle = left + (left + right) / 2;
+		mergesort(a, aux, left, middle);
+		mergesort(a, aux, middle+1, right);
+		merge(a, aux, left, middle, right);
+	}
+	
+	public static void merge(Comparable[] a, Comparable[] aux, int left, int mid, int right) {
+		for (int k = left; k <= right; ++k)
+			aux[k] = a[k];
+		
+		int i = left, j = mid+1;
+		for (int k = left; k <= right; ++k) {
+			if (i > mid) a[k] = aux[j++];
+			else if (j > right) a[k] = aux[i++];
+			else if (Sort.less(aux[j], aux[i])) a[k] = aux[j++];
+			else a[k] = aux[i++];
+		}
+	}
+	
+	/*public static Comparable[] merge(Comparable[] a, Comparable[] b) {
+		Comparable[] ret = new Comparable[a.length + b.length];
+		int first = 0, second = 0;
+		for(int i = 0; i < ret.length; ++i) {
+			if (first >= a.length) {
+				ret[first + second] = a[second];
+				++second;
+			}
+			else if (second >= b.length) {
+				ret[first + second] = 
+			}
+		}
+		
+		return ret;
+	}*/
 }
