@@ -22,20 +22,32 @@ public class Quick extends Sort {
 	 * @param a - array
 	 */
 	public static void sort(Comparable[] a) {
-		// TODO implement sort
+		quicksort(a, 0, a.length - 1);
 	}
 	
-	public static void quicksort() {
+	public static void quicksort(Comparable[] a, int left, int right) {
+		// Base case
+		if (left >= right) return;
 		
-	}
-	
-	public static int partition(Comparable[] a, int left, int right) {
-		// Randomly generate the pivot
+		// Randomly generate the index of the pivot
 		Random generator = new Random();
 		int pivot = generator.nextInt(right - left + 1) + left;
-		Sort.exch(a, pivot, right);
 		
-		// Partition based on pivot value
+		pivot = partition(a, pivot, left, right);
+		quicksort(a, left, pivot-1);
+		quicksort(a, pivot+1, right);
+	}
+	
+	/**
+	 * Partition a region of the array based upon the value of a given pivot index
+	 * @param a - the array
+	 * @param pivot - the index of the pivot
+	 * @param left - starting index of region of array to be partitioned
+	 * @param right - ending index of region of array to be partitioned
+	 * @return the final position of the pivot
+	 */
+	public static int partition(Comparable[] a, int pivot, int left, int right) {
+		Sort.exch(a, pivot, right);
 		int i = left, j = right-1;
 		Comparable pivotVal = a[right];
 		
