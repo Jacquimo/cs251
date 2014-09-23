@@ -32,6 +32,12 @@ public class Merge extends Sort {
 	 */
 	public static void mergesort(Comparable[] a, Comparable[] aux, int left, int right) {
 		if (right <= left) return;
+		
+		if (right - left <= 16) {
+			insertionSort(a, left, right);
+			return;
+		}
+		
 		int middle = (left + right) / 2;
 		mergesort(a, aux, left, middle);
 		mergesort(a, aux, middle+1, right);
@@ -66,4 +72,14 @@ public class Merge extends Sort {
 		
 		return ret;
 	}*/
+	
+	public static void insertionSort(Comparable[] a, int left, int right) {
+		for (int i = left; i <= right; ++i) {
+			int j = i;
+			while (j > left && Sort.less(a[j], a[j-1])) {
+				Sort.exch(a, j, j-1);
+				--j;
+			}
+		}
+	}
 }
