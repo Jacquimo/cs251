@@ -2,9 +2,9 @@
 /**
  * Locality-Aware Selection Sort
  * 
- * @author TODO put your username here
- * @version TODO put the date here
- * @pso   TODO put your PSO section here
+ * @author ghousto
+ * @version 9/22/14
+ * @pso   P06
  */
 public class LSelection extends Sort {
 	/**
@@ -18,6 +18,14 @@ public class LSelection extends Sort {
 	 * @param d - locality
 	 */
 	public static void sort(Comparable[] a, int d) {
-		// TODO implement sort
+		for (int i=0; i < a.length; ++i) { // the index to place the smallest element
+			// Find the smallest element in the unsorted region
+			int smallest = i;
+			for (int j = i + 1; j < j + d && j < a.length; ++j) {
+				if (Sort.less(a[j], a[smallest]))
+					smallest = j;
+			}
+			Sort.exch(a, i, smallest);
+		}
 	}
 }

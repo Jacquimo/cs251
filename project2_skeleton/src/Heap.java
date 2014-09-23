@@ -4,7 +4,6 @@ import java.util.Arrays;
 /**
  * General Heap Sort
  * 
- * TODO if this is an off-the-shelf implementation, cite where you got it from.
  * 
  * @author ghousto
  * @version 9/22/14

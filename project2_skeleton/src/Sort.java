@@ -196,7 +196,7 @@ public class Sort {
 			StdOut.print("Sort failed.");
 			//Sort.show((Comparable[])data);
 		} else {
-			StdOut.printf("%.4f",millis);
+			StdOut.printf("%.4f\n",millis);
 		}
 		
 		System.setIn(System.in);
