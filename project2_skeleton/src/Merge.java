@@ -32,7 +32,7 @@ public class Merge extends Sort {
 	 */
 	public static void mergesort(Comparable[] a, Comparable[] aux, int left, int right) {
 		if (right <= left) return;
-		int middle = left + (left + right) / 2;
+		int middle = (left + right) / 2;
 		mergesort(a, aux, left, middle);
 		mergesort(a, aux, middle+1, right);
 		merge(a, aux, left, middle, right);
