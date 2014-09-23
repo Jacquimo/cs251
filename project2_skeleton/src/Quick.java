@@ -39,7 +39,12 @@ public class Quick extends Sort {
 		Random generator = new Random();
 		int pivot = generator.nextInt(right - left + 1) + left;
 		
+		//TestQSort.printArray(a, pivot, left, right);
+		//System.out.flush();
 		pivot = partition(a, pivot, left, right);
+		//TestQSort.printArray(a, pivot, left, right);
+		//System.out.flush();
+		
 		int lengthLeft = pivot - left;
 		int lengthRight = right - pivot;
 		
@@ -83,7 +88,7 @@ public class Quick extends Sort {
 		Sort.exch(a, pivot, right);
 		pivot = right;
 		
-		int storeIndex = left;
+		/*int storeIndex = left;
 		for (int i = left; i < right; ++i) {
 			if (Sort.less(a[i], a[pivot])) {
 				Sort.exch(a, i, storeIndex);
@@ -91,28 +96,42 @@ public class Quick extends Sort {
 			}
 		}
 		Sort.exch(a, storeIndex, right);
-		return storeIndex;
+		return storeIndex;*/
 		
-		/*int i = left, j = right-1;
+		int i = left, j = right-1;
 		
-		while (i < j) {
+		while (true) {
 			// Find index i such that a[i] > a[pivot]
-			while (i < j && Sort.less(a[i], a[pivot]))
+			//while (i < pivot && Sort.less(a[i], a[pivot]))
+			while (i < pivot && a[i].compareTo(a[pivot]) <= 0)
 				++i;
 			
 			// Find index j such that a[j] < a[pivot]
-			while (i < j && Sort.less(a[pivot], a[j]))
+			//while (j > left && Sort.less(a[pivot], a[j]))
+			while (j > left && a[pivot].compareTo(a[j]) <= 0)
 				--j;
 			
-			if (i < j) {
+			if (i < j)
 				Sort.exch(a, i, j);
-				++i; --j;
-			}
+			else
+				break;
 		}
 		// Need to make sure that i is the correct index to swap the pivot back into
-		Sort.exch(a, i, pivot);
+		if (i == pivot) return pivot;
+		Sort.exch(a, i, pivot); 
+		return i;
 		
-		return i;*/
+		/*if (Sort.less(a[pivot], a[i])) { 
+			Sort.exch(a, i, pivot); 
+			return i; }
+		else if (Sort.less(a[pivot], a[j])) {
+			Sort.exch(a, j, pivot);
+			return j;
+		}
+		else
+			return pivot;*/
+		
+		//return i;
 	}
 	
 	public static void insertionSort(Comparable[] a, int left, int right) {
