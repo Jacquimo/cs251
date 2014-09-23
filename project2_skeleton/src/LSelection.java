@@ -21,7 +21,7 @@ public class LSelection extends Sort {
 		for (int i=0; i < a.length; ++i) { // the index to place the smallest element
 			// Find the smallest element in the unsorted region
 			int smallest = i;
-			for (int j = i + 1; j < j + d && j < a.length; ++j) {
+			for (int j = i + 1; j < i + 1 + d && j < a.length; ++j) {
 				if (Sort.less(a[j], a[smallest]))
 					smallest = j;
 			}
