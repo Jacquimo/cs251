@@ -64,7 +64,7 @@ public class Quick extends Sort implements Runnable {
 			if (ThreadQuick.num_threads < ThreadQuick.MAX_THREADS * 2)
 				new ThreadQuick(a, pivot+1, right).start();
 			else
-				quicksort(a, pivot+1, right);				
+				quicksort(a, pivot+1, right);
 		}
 		else {
 			//quicksort(a, pivot+1, right);
