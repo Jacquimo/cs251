@@ -1,4 +1,5 @@
 import java.util.Random;
+import java.util.concurrent.*;
 
 
 /**
@@ -11,11 +12,18 @@ import java.util.Random;
  * @pso   P06
  *
  */
-public class Quick extends Sort {
+public class Quick extends Sort implements Runnable {
 	/**
 	 * this class should not be instantiated
 	 */
-	private Quick() {}
+	private Quick(Comparable[] a, int left, int right) {
+		this.array = a;
+		this.l = left;
+		this.r = right;
+	}
+	private Comparable[] array;
+	private int l;
+	private int r;
 
 	/**
 	 * sort the array
@@ -38,42 +46,40 @@ public class Quick extends Sort {
 		// Randomly generate the index of the pivot
 		Random generator = new Random();
 		int pivot = generator.nextInt(right - left + 1) + left;
-		
-		//TestQSort.printArray(a, pivot, left, right);
-		//System.out.flush();
 		pivot = partition(a, pivot, left, right);
-		//TestQSort.printArray(a, pivot, left, right);
-		//System.out.flush();
 		
 		int lengthLeft = pivot - left;
 		int lengthRight = right - pivot;
 		
 		// Optimize code to sort shorter side first
 		if (lengthLeft < lengthRight) {
-			quicksort(a, left, pivot-1);
-			quicksort(a, pivot+1, right);
+			//quicksort(a, left, pivot-1);
+			//quicksort(a, pivot+1, right);
+			
+			if (ThreadQuick.num_threads < ThreadQuick.MAX_THREADS * 2)
+				new ThreadQuick(a, left, pivot-1).start();
+			else
+				quicksort(a, left, pivot-1);
+			
+			if (ThreadQuick.num_threads < ThreadQuick.MAX_THREADS * 2)
+				new ThreadQuick(a, pivot+1, right).start();
+			else
+				quicksort(a, pivot+1, right);				
 		}
 		else {
-			quicksort(a, pivot+1, right);
-			quicksort(a, left, pivot-1);
-		}
-		
-		/*if (lengthLeft < lengthRight) { // Sort the shorter side first (optimization)
-			if (lengthLeft <= 16)
-				insertionSort(a, left, pivot-1);
-			else {
-				quicksort(a, left, pivot-1);
+			//quicksort(a, pivot+1, right);
+			//quicksort(a, left, pivot-1);
+			
+			if (ThreadQuick.num_threads < ThreadQuick.MAX_THREADS * 2)
+				new ThreadQuick(a, pivot+1, right).start();
+			else
 				quicksort(a, pivot+1, right);
-			}
-		}
-		else {
-			if (lengthRight <= 16)
-				insertionSort(a, pivot+1, right);
-			else {
-				quicksort(a, pivot+1, right);
+			
+			if (ThreadQuick.num_threads < ThreadQuick.MAX_THREADS * 2)
+				new ThreadQuick(a, left, pivot-1).start();
+			else
 				quicksort(a, left, pivot-1);
-			}
-		}*/
+		}
 	}
 	
 	/**
@@ -142,5 +148,41 @@ public class Quick extends Sort {
 				--j;
 			}
 		}
+	}
+
+	@Override
+	public void run() {
+		quicksort(array, l, r);
+	}
+}
+
+class ThreadQuick extends Thread {
+	static int MAX_THREADS = Runtime.getRuntime().availableProcessors();
+	//static final ExecutorService executor = Executors.newFixedThreadPool(MAX_THREADS);
+	public static int num_threads = 0;
+	
+	private Comparable[] array;
+	private int left;
+	private int right;
+	
+	public ThreadQuick(Comparable[] a, int l, int r) {
+		/*synchronized((Integer) MAX_THREADS) {
+			MAX_THREADS = Runtime.getRuntime().availableProcessors();
+		}*/
+		
+		array = a;
+		left = l;
+		right = r;
+	}
+
+	@Override
+	public void run() {
+		++num_threads;
+		Quick.quicksort(array, left, right);
+		--num_threads;
+	}	
+	
+	public void start() {
+		this.run();
 	}
 }
