@@ -30,8 +30,8 @@ public class Quick extends Sort implements Runnable {
 	 * @param a - array
 	 */
 	public static void sort(Comparable[] a) {
-		//quicksort(a, 0, a.length - 1);
-		TestQSort.qsort(a, 0, a.length-1);
+		quicksort(a, 0, a.length - 1);
+		//TestQSort.qsort(a, 0, a.length-1);
 	}
 	
 	public static void quicksort(Comparable[] a, int left, int right) {
