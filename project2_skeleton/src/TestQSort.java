@@ -25,4 +25,31 @@ public class TestQSort {
 			System.out.printf("\n");
 		}
 	}
+	
+	public static void qsort(Comparable[] a, int left, int right) {
+		if (left >= right) return;
+		int pivotIndex = (int)((right - left + 1) * Math.random() + left); // random pivot index
+		pivotIndex = partition(a, pivotIndex, left, right);
+		qsort(a, left, pivotIndex-1);
+		qsort(a, pivotIndex+1, right);
+	}
+	
+	public static int partition(Comparable[] a, int pIndex, int left, int right) {
+		// move the pivot over to the right hand index
+		Comparable pValue = a[pIndex];
+		Sort.exch(a, pIndex, right);
+		pIndex = right;
+		
+		// look for elements less than the pivot value (that are on the right hand side) and move them to the left
+		int storeIndex = left;
+		for (int i = left; i < pIndex; ++i) {
+			if (a[i].compareTo(pValue) < 0) {
+				Sort.exch(a, i, storeIndex);
+				++storeIndex;
+			}
+		}
+		// put the pivot into its final position
+		Sort.exch(a, storeIndex, pIndex);
+		return storeIndex;
+	}
 }
