@@ -20,7 +20,8 @@ public class Merge extends Sort {
 	 * @param a - array
 	 */
 	public static void sort(Comparable[] a) {
-		mergesort(a, new Comparable[a.length], 0, a.length - 1);
+		//mergesort(a, new Comparable[a.length], 0, a.length - 1);
+		TestQSort.msort(a, new Comparable[a.length], 0, a.length - 1);
 	}
 	
 	/**

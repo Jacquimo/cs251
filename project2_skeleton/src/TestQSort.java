@@ -52,4 +52,40 @@ public class TestQSort {
 		Sort.exch(a, storeIndex, pIndex);
 		return storeIndex;
 	}
+	
+	public static void msort(Comparable[] a, Comparable[] aux, int left, int right) {
+		if (left >= right) return; // base case
+		
+		if (right - left <= 16) { // optimization
+			insertionSort(a, left, right);
+			return;
+		}
+		
+		int mid = (right + left) / 2;
+		msort(a, aux, left, mid);
+		msort(a, aux, mid+1, right);
+		merge(a, aux, left, mid, right);
+	}
+	
+	public static void merge (Comparable[] a, Comparable[] aux, int left, int mid, int right) {
+		// copy the subarray into the auxiliary array
+		for (int i = left; i <= right; ++i)
+			aux[i] = a[i];
+		
+		int l = left, r = mid+1;
+		for (int i = left; i <= right; ++i) {
+			if (l > mid) a[i] = aux[r++]; // if we used all the elements in the left array
+			else if (r > right) a[i] = aux[l++]; // if we used all the elements in the right array
+			else if (aux[r].compareTo(aux[l]) < 0) a[i] = aux[r++];
+			else a[i] = aux[l++];
+		}
+	}
+	
+	public static void insertionSort(Comparable[] a, int left, int right) {
+		for (int i = left; i <= right; i++) {
+			for (int j = i; j > left && a[j].compareTo(a[j-1]) < 0; --j) {
+				Sort.exch(a, j, j-1);
+			}
+		}
+	}
 }
