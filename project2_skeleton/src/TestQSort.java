@@ -1,17 +1,46 @@
 import java.util.*;
 
 public class TestQSort {
-
+	public static boolean aIsA = true;
+	public static boolean dontPrint = false;
+	
 	public static void main(String[] args) {
-		Comparable[] a = new Comparable[16];
+		Comparable[] a = new Comparable[20];
 		Random g = new Random();
 		for (int i = 0; i < a.length; ++i)
-			a[i] = g.nextInt(19) + 1;
+			a[i] = g.nextInt(20) + 1;
 		
-		printArray(a, -1, 0, a.length - 1);
+		/*printArray(a, -1, 0, a.length - 1);
 		Quick.sort(a);
 		System.out.printf("The final array after calling quicksort is:\n");
-		printArray(a, -1, 0, a.length - 1);
+		printArray(a, -1, 0, a.length - 1);*/
+		
+		printArray(a, null, 0, a.length-1);
+		aIsA = false;
+		LMerge.sort(a, a.length-1);
+		//printArray(a, null, 0, a.length-1);
+		System.out.printf("%s\n", Sort.isSorted(a) ? "Sorted" : "Sort Failed");
+	}
+	
+	public static void printArray(Comparable[] a, Comparable[] aux, int left, int right, int timing) {
+		if (dontPrint) return;
+		
+		switch (timing) {
+		case 0: System.out.printf("Before left sort\n"); break;
+		case 1: System.out.printf("After left sort, before right sort\n"); break;
+		case 2: System.out.printf("After right sort\n"); break;
+		case 3: System.out.printf("After merge\n"); break;
+		case 4: System.out.printf("Array contains specified element\n"); break;
+		default: System.out.printf("The array within indices %d - %d, inclusive\n", left, right);
+		}
+		//System.out.printf("%s\t%s\n", aIsA ? "A" : "Aux" , aIsA ? "Aux" : "A" );
+		/*for (int i = left; i <= right; ++i)
+			System.out.printf("%d\t%d\n", a[i], aux!= null ? aux[i] : -1);*/
+		LMerge.show(aux,  left, right);
+	}
+	
+	public static void printArray(Comparable[] a, Comparable[] aux, int left, int right) {
+		printArray(a, aux, left, right, -1);
 	}
 	
 	public static void printArray(Comparable[] a, int pIndex, int left, int right) {
