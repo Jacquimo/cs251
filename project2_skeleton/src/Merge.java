@@ -42,8 +42,6 @@ public class Merge extends Sort {
 		int middle = (left + right) / 2;
 		mergesort(a, aux, left, middle);
 		mergesort(a, aux, middle+1, right);
-		if (Sort.less(a[middle], a[middle + 1])) // if the largest element in the left subarray is <= smallest element in right subarray, they're already sorted
-			return;
 		merge(a, aux, left, middle, right);
 	}
 	
