@@ -20,8 +20,8 @@ public class Merge extends Sort {
 	 * @param a - array
 	 */
 	public static void sort(Comparable[] a) {
-		//mergesort(a, new Comparable[a.length], 0, a.length - 1);
-		TestQSort.msort(a, new Comparable[a.length], 0, a.length - 1);
+		mergesort(a, new Comparable[a.length], 0, a.length - 1);
+		//TestQSort.msort(a, new Comparable[a.length], 0, a.length - 1);
 	}
 	
 	/**
@@ -57,22 +57,6 @@ public class Merge extends Sort {
 			else a[k] = aux[i++];
 		}
 	}
-	
-	/*public static Comparable[] merge(Comparable[] a, Comparable[] b) {
-		Comparable[] ret = new Comparable[a.length + b.length];
-		int first = 0, second = 0;
-		for(int i = 0; i < ret.length; ++i) {
-			if (first >= a.length) {
-				ret[first + second] = a[second];
-				++second;
-			}
-			else if (second >= b.length) {
-				ret[first + second] = 
-			}
-		}
-		
-		return ret;
-	}*/
 	
 	public static void insertionSort(Comparable[] a, int left, int right) {
 		for (int i = left; i <= right; ++i) {
