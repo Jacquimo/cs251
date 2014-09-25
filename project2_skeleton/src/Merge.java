@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 
 /**
  * General Merge Sort
@@ -20,7 +22,8 @@ public class Merge extends Sort {
 	 * @param a - array
 	 */
 	public static void sort(Comparable[] a) {
-		mergesort(a, new Comparable[a.length], 0, a.length - 1);
+		//mergesort(a, new Comparable[a.length], 0, a.length - 1);
+		mergesort(a, Arrays.copyOf(a, a.length), 0, a.length - 1);
 		//TestQSort.msort(a, new Comparable[a.length], 0, a.length - 1);
 	}
 	
@@ -40,13 +43,20 @@ public class Merge extends Sort {
 		}
 		
 		int middle = (left + right) / 2;
-		mergesort(a, aux, left, middle);
+		
+		/*mergesort(a, aux, left, middle);
 		mergesort(a, aux, middle+1, right);
-		merge(a, aux, left, middle, right);
+		merge(a, aux, left, middle, right);*/
+		
+		// Optimization that eliminates the copy to aux in the merge
+		// Assumes that aux has already been initialized as a complete (and full) copy of a
+		mergesort(aux, a, left, middle);
+		mergesort(aux, a, middle+1, right);
+		merge(aux, a, left, middle, right);
 	}
 	
 	public static void merge(Comparable[] a, Comparable[] aux, int left, int mid, int right) {
-		for (int k = left; k <= right; ++k)
+		/*for (int k = left; k <= right; ++k)
 			aux[k] = a[k];
 		
 		int i = left, j = mid+1;
@@ -55,6 +65,14 @@ public class Merge extends Sort {
 			else if (j > right) a[k] = aux[i++];
 			else if (Sort.less(aux[j], aux[i])) a[k] = aux[j++];
 			else a[k] = aux[i++];
+		}*/
+		
+		int i = left, j = mid+1;
+		for (int k = left; k <= right; ++k) {
+			if (i > mid) aux[k] = a[j++];
+			else if (j > right) aux[k] = a[i++];
+			else if (Sort.less(a[j], a[i])) aux[k] = a[j++];
+			else aux[k] = a[i++];
 		}
 	}
 	
