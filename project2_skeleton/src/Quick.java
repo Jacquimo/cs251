@@ -6,7 +6,7 @@ import java.util.Random;
  * TODO This implementation uses the same logic as the one in the lecture slides
  * 
  * @author ghousto
- * @version 9/22/14
+ * @version 10/01/14
  * @pso P06
  *
  */
@@ -29,7 +29,7 @@ public class Quick extends Sort {
 		int lengthOfDiv = a.length / ThreadQuick.MAX_THREADS;
 		ThreadQuick[] threads = new ThreadQuick[ThreadQuick.MAX_THREADS + 2];
 		for (int i = 0; i < ThreadQuick.MAX_THREADS; ++i) {
-			threads[i] =  new ThreadQuick(a, i * lengthOfDiv, (i + 1) * lengthOfDiv - 1);
+			threads[i] =  new ThreadQuick(a, i * lengthOfDiv, (i + 1) * lengthOfDiv - 1, false);
 			threads[i].start();
 		}
 		
@@ -37,9 +37,10 @@ public class Quick extends Sort {
 		boolean finishedRightHalf = false;
 		int indexOfNewestThread = 4;
 		// Utilize fact that the max number of threads will be 4 unless changed elsewhere
+		// Combine the 4 spearately sorted sections into 2 half of the array
 		while (true) {
 			if (!finishedLeftHalf && !threads[0].isAlive() && !threads[1].isAlive()) {
-				threads[indexOfNewestThread] = new ThreadQuick(a, 0, lengthOfDiv * 2 - 1);
+				threads[indexOfNewestThread] = new ThreadQuick(a, 0, lengthOfDiv * 2 - 1, false);
 				threads[indexOfNewestThread++].start();
 				finishedLeftHalf = true;
 				// If the value is > 5, then the other helper thread has been instantiated and we
@@ -48,7 +49,7 @@ public class Quick extends Sort {
 			}
 			
 			if (!finishedRightHalf && !threads[2].isAlive() && !threads[3].isAlive()) {
-				threads[indexOfNewestThread] = new ThreadQuick(a, lengthOfDiv * 2, a.length - 1);
+				threads[indexOfNewestThread] = new ThreadQuick(a, lengthOfDiv * 2, a.length - 1, false);
 				threads[indexOfNewestThread++].start();
 				finishedRightHalf = true;
 				// Use duplicate if statement (as above) on purpose instead of moving it out a level
@@ -56,6 +57,11 @@ public class Quick extends Sort {
 				if (indexOfNewestThread > 5) break;
 			}
 		}
+		
+		//
+		do {
+			
+		} while (true);
 	}
 
 	public static void quicksort(Comparable[] a, int left, int right) {
@@ -175,6 +181,33 @@ public class Quick extends Sort {
 			}
 		}
 	}
+	
+	/**
+	 * executes an in-place merge just like a merge in Mergesort
+	 * @param a - the array containing the values
+	 * @param left - leftmost index of values in left-hand group
+	 * @param mid TODO
+	 * @param right - rightmost index of values in right-hand group
+	 */
+	public static void merge(Comparable[] a, int left, int mid, int right) {
+		int l = left, r = mid + 1;
+		
+		// Check to see if we can skip the merge
+		// This check is beneficial since this method won't be called recursively (i.e. only add 1 extra comparison)
+		if (a[mid].compareTo(a[r]) <= 0) 
+			return;
+		
+		while (l <= mid && r <= right) {
+			if (a[l].compareTo(a[r]) <= 0)
+				++l;
+			else { 
+				Comparable tmp = a[r];
+				System.arraycopy(a, l, a, l+1, r-l);
+				a[l] = tmp;
+				++l; ++mid; ++r;
+			}
+		}
+	}
 }
 
 class ThreadQuick extends Thread {
@@ -186,8 +219,9 @@ class ThreadQuick extends Thread {
 	private Comparable[] array;
 	private int left;
 	private int right;
+	private boolean merge;
 
-	public ThreadQuick(Comparable[] a, int l, int r) {
+	public ThreadQuick(Comparable[] a, int l, int r, boolean m) {
 		/*
 		 * synchronized((Integer) MAX_THREADS) { MAX_THREADS =
 		 * Runtime.getRuntime().availableProcessors(); }
@@ -200,9 +234,11 @@ class ThreadQuick extends Thread {
 
 	@Override
 	public void run() {
-		++ThreadQuick.num_threads;
-		Quick.quicksort(array, left, right);
-		--ThreadQuick.num_threads;
+		if (!merge) {
+			++ThreadQuick.num_threads;
+			Quick.quicksort(array, left, right);
+			--ThreadQuick.num_threads;
+		}
 	}
 
 	@Override

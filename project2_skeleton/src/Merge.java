@@ -1,4 +1,5 @@
-import java.util.Arrays;
+
+
 
 
 /**
@@ -23,8 +24,10 @@ public class Merge extends Sort {
 	 */
 	public static void sort(Comparable[] a) {
 		//mergesort(a, new Comparable[a.length], 0, a.length - 1);
-		mergesort(a, Arrays.copyOf(a, a.length), 0, a.length - 1);
+		//Merge.mergesort(a, Arrays.copyOf(a, a.length), 0, a.length - 1);
 		//TestQSort.msort(a, new Comparable[a.length], 0, a.length - 1);
+		
+		Merge.mergesort(a, null, 0, a.length - 1);
 	}
 	
 	/**
@@ -38,7 +41,7 @@ public class Merge extends Sort {
 		if (right <= left) return;
 		
 		if (right - left <= 16) {
-			insertionSort(a, left, right);
+			Merge.insertionSort(a, left, right);
 			return;
 		}
 		
@@ -50,9 +53,13 @@ public class Merge extends Sort {
 		
 		// Optimization that eliminates the copy to aux in the merge
 		// Assumes that aux has already been initialized as a complete (and full) copy of a
-		mergesort(aux, a, left, middle);
-		mergesort(aux, a, middle+1, right);
-		merge(aux, a, left, middle, right);
+		/*Merge.mergesort(aux, a, left, middle);
+		Merge.mergesort(aux, a, middle+1, right);
+		Merge.merge(aux, a, left, middle, right);*/
+		
+		Merge.mergesort(a, null, left, middle);
+		Merge.mergesort(a, null, middle+1, right);
+		Quick.merge(a, left, middle, right);
 	}
 	
 	public static void merge(Comparable[] a, Comparable[] aux, int left, int mid, int right) {
