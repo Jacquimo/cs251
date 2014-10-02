@@ -59,7 +59,7 @@ public class Heap extends Sort {
 	}
 	
 	public static void buildMaxHeap(Comparable[] a) {
-		for (int k = a.length / 2; k >= 0; --k) {
+		for (int k = a.length / 2 - 1; k >= 0; --k) {
 			sink(a, k, a.length - 1);
 		}
 	}
@@ -124,7 +124,7 @@ public class Heap extends Sort {
 		}*/
 	}
 	
-	public static boolean canHaveChildren(Comparable[] a, int k) {
+	/*public static boolean canHaveChildren(Comparable[] a, int k) {
 		return 2*k+1 < a.length;
 	}
 	
@@ -139,5 +139,5 @@ public class Heap extends Sort {
 			return b;
 		else
 			return a;
-	}
+	}*/
 }
