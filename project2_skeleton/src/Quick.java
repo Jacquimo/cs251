@@ -192,12 +192,13 @@ public class Quick extends Sort {
 	public static void merge(Comparable[] a, int left, int mid, int right) {
 		//if (right <= mid) return;
 		int leftCounter = left, rightCounter = mid + 1;
-		int leftRelevantRange = mid - 1, rightRelevantRange = mid+2;
+		int leftRelevantRange = mid , rightRelevantRange = mid+1;
 		
 		// Check to see if we can skip the merge
 		// This check is beneficial since this method won't be called recursively (i.e. only add 1 extra comparison)
-		if (a[mid].compareTo(a[rightCounter]) <= 0) 
-			return;
+		/*if (a[mid].compareTo(a[rightCounter]) <= 0) 
+			return;*/
+		
 		
 		// The folowing code is an algorithm I created my self which I call "Relevant Range". The
 		// boundaries of the range are expanded until the value at the left boundary is the largest
@@ -206,14 +207,27 @@ public class Quick extends Sort {
 		// in the left subarray. The values wihtin the two boundaries are the only values that actually
 		// need to be be merged together, significantly reducing running time.
 		
-		while (leftRelevantRange > left && a[rightCounter].compareTo(a[leftRelevantRange]) <= 0) {
+		while (((leftRelevantRange > left) && a[rightCounter].compareTo(a[leftRelevantRange]) <= 0) || 
+				((rightRelevantRange < right) && a[rightRelevantRange].compareTo(a[mid]) <= 0)) {
+			if (leftRelevantRange > left) 
+				--leftRelevantRange;
+			if (rightRelevantRange < right) 
+				++rightRelevantRange;
+		}
+	
+		Quick.merge(a, leftRelevantRange, mid, rightRelevantRange, true);
+		
+		
+		
+		
+		/*while (leftRelevantRange > left && a[rightCounter].compareTo(a[leftRelevantRange]) <= 0) {
 			--leftRelevantRange;
 		}
 	
 		while(rightRelevantRange < right && a[rightRelevantRange].compareTo(a[mid]) <= 0)
 			++rightRelevantRange;
 	
-		Quick.merge(a, leftRelevantRange, mid, rightRelevantRange, true);
+		Quick.merge(a, leftRelevantRange, mid, rightRelevantRange, true);*/
 		
 		
 		
@@ -331,6 +345,7 @@ public class Quick extends Sort {
 	
 	
 	public static void merge(Comparable[] a, int left, int mid, int right, boolean foundRelevantRange) {
+		if (a[mid].compareTo(a[mid+1]) <= 0) return;
 		int leftCounter = left, rightCounter = mid + 1, leftRelevantRange = mid - 1;
 		
 		while (leftCounter <= mid && rightCounter <= right) {
