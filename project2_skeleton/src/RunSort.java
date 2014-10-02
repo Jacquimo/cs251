@@ -5,7 +5,7 @@ import java.util.Arrays;
 
 
 public class RunSort {
-	private static enum Algorithm{Selection, Merge, Heap, Quick};
+	public static enum Algorithm{Selection, Merge, Heap, Quick};
 	
 	public static void main(String[] args) {
 		// parse CLI arguments
@@ -86,6 +86,8 @@ public class RunSort {
 			}
 		}
 		
+		
+		
 		// read all data
 		Comparable[] data = null;
 		int[] int_data = StdIn.readAllInts();
@@ -94,80 +96,199 @@ public class RunSort {
 			data[i] = int_data[i];
 		
 		// Make multiple copies of the data
-		Comparable[][] duplicateData = new Comparable[iterations][data.length];
-		for (int i = 0; i < iterations - 1; ++i)
-			duplicateData[i] = Arrays.copyOf(data, data.length);
-		duplicateData[iterations-1] = data;
+		//Comparable[] duplicateData = Arrays.copyOf(data, data.length);
+		//for (int i = 0; i < 2; ++i)
+			//duplicateData[i] = Arrays.copyOf(data, data.length);
 		
-		
-		// run sort on data
-		double[] runTimes = new double[iterations];
-		double totalRuntime = 0;
-		
-		for (int i=0; i < iterations; ++i) {
-			long t1 = System.nanoTime();
-			if (d >= 0) {
-				// use locality-aware algorithms
-				switch (alg) {
-				default:
-				case Selection:
-					LSelection.sort(duplicateData[i], d);
-					break;
-				case Merge:
-					LMerge.sort(duplicateData[i], d);
-					break;
-				case Heap:
-					LHeap.sort(duplicateData[i], d);
-					break;
-				case Quick:
-					// No location-aware considered for Quicksort
-					Quick.sort(duplicateData[i]);
-					break;
-				}
-			} else {
-				// use general algorithms
-				switch (alg) {
-				default:
-				case Selection:
-					Selection.sort(duplicateData[i]);
-					break;
-				case Merge:
-					Merge.sort(duplicateData[i]);
-					break;
-				case Heap:
-					Heap.sort(duplicateData[i]);
-					break;
-				case Quick:
-					Quick.sort(duplicateData[i]);
-					break;
-				}
-			}
-			long t2 = System.nanoTime();
-			
-			if (!Sort.isSorted(duplicateData[i])) {
-				StdOut.print("Sort failed.");
-				return;
-			}
-			
-			double millis = (t2 - t1) / 1000000.0;
-			runTimes[i] = millis;
-			totalRuntime += millis;
-		}
+		long total1 = System.nanoTime();
 
+		// run sort on data
+		// double[] runTimes = new double[iterations];
+		// double totalRuntime = 0;
+		// Comparable[] duplicateData = Arrays.copyOf(data, data.length);
+
+		for (int i = 0; i < iterations; ++i) {
+			if (ThreadSorts.activeCount() < ThreadSorts.MAX_THREADS)
+				(new ThreadSorts(Arrays.copyOf(data, data.length), iterations, alg, d, i + "")).start();
+			/*else {
+				Comparable[] duplicateData = Arrays.copyOf(data, data.length);
+				
+				long t1 = System.nanoTime();
+				if (d >= 0) {
+					// use locality-aware algorithms
+					switch (alg) {
+					default:
+					case Selection:
+						LSelection.sort(duplicateData, d);
+						break;
+					case Merge:
+						LMerge.sort(duplicateData, d);
+						break;
+					case Heap:
+						LHeap.sort(duplicateData, d);
+						break;
+					case Quick:
+						// No location-aware considered for Quicksort
+						Quick.sort(duplicateData);
+						break;
+					}
+				} else {
+					// use general algorithms
+					switch (alg) {
+					default:
+					case Selection:
+						Selection.sort(duplicateData);
+						break;
+					case Merge:
+						Merge.sort(duplicateData);
+						break;
+					case Heap:
+						Heap.sort(duplicateData);
+						break;
+					case Quick:
+						Quick.sort(duplicateData);
+						break;
+					}
+				}
+				long t2 = System.nanoTime();
+
+				if (!Sort.isSorted(duplicateData)) {
+					StdOut.print("Sort failed.");
+					return;
+				}
+
+				double millis = (t2 - t1) / 1000000.0;
+				ThreadSorts.runTimes[i] = millis;*/
+				//totalRuntime += millis;
+
+				//duplicateData = Arrays.copyOf(data, data.length);
+			//}
+		}
+		
+		long total2 = System.nanoTime();
+		
+		try {
+			synchronized (ThreadSorts.threads[7]) {
+				ThreadSorts.threads[7].join(); // Wait until the last thread is finished
+			}
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		double totalRuntime = 0;
+		for (int i = 0; i < iterations; ++i)
+			totalRuntime += ThreadSorts.runTimes[i];
+			
 		// StdOut.printf("%.4f\n",millis);
-		double mean = totalRuntime / (iterations);
+		double mean = totalRuntime / iterations;
 		double variance = 0;
 		for (int i = 0; i < iterations; ++i) {
-			variance += Math.pow((runTimes[i] - mean), 2) ;//* (runTimes[i] - mean);
-			StdOut.printf("Run %d: %.4f ms\n", i + 1, runTimes[i]);
+			variance += Math.pow((ThreadSorts.runTimes[i] - mean), 2) ;//* (runTimes[i] - mean);
+			StdOut.printf("Run %d: %.4f ms\n", i + 1, ThreadSorts.runTimes[i]);
 		}
 		variance /= (iterations - 1);
 		double std = Math.sqrt(variance);
 		
+		// finished al calculation, so can end total running time
+		
+		
 		StdOut.printf("Mean = %.4f\n", mean);
 		StdOut.printf("Variance = %.4f\n", variance);
 		StdOut.printf("Standard Deviation = %.4f\n", std);
+		System.out.printf("Total Running Time: %.2f ms\n", (total2 - total1) / 1000000.0);
 		
 		System.setIn(System.in);
 	}
+	
+	
 }
+
+class ThreadSorts extends Thread {
+	final static int MAX_THREADS = Runtime.getRuntime().availableProcessors();
+	public static double[] runTimes = null;
+	public static int iterations = 0;
+	public static ThreadSorts[] threads = null;
+	
+	private Comparable[] data;
+	private RunSort.Algorithm alg;
+	private int d;
+	
+	public ThreadSorts(Comparable[] data, int iters, RunSort.Algorithm algorithm, int locality, String number) {
+		super(number);
+		this.data = data;
+		alg = algorithm;
+		d = locality;
+	
+		if (iterations == 0) 
+			iterations = iters;
+		if (runTimes == null) 
+			runTimes = new double[iterations];
+		if (threads == null)
+			threads = new ThreadSorts[iterations];
+	}
+	
+	@Override
+	public void start() {
+		this.run();
+	}
+	
+	@Override
+	public void run() {
+		int id = Integer.parseInt(super.getName());
+		synchronized (threads) {
+			threads[id] = this;
+		}
+		
+		long t1 = System.nanoTime();
+		if (d >= 0) {
+			// use locality-aware algorithms
+			switch (alg) {
+			default:
+			case Selection:
+				LSelection.sort(data, d);
+				break;
+			case Merge:
+				LMerge.sort(data, d);
+				break;
+			case Heap:
+				LHeap.sort(data, d);
+				break;
+			case Quick:
+				// No location-aware considered for Quicksort
+				Quick.sort(data);
+				break;
+			}
+		} else {
+			// use general algorithms
+			switch (alg) {
+			default:
+			case Selection:
+				Selection.sort(data);
+				break;
+			case Merge:
+				Merge.sort(data);
+				break;
+			case Heap:
+				Heap.sort(data);
+				break;
+			case Quick:
+				Quick.sort(data);
+				break;
+			}
+		}
+		long t2 = System.nanoTime();
+		
+		if (!Sort.isSorted(data)) {
+			StdOut.print("Sort failed.");
+			return;
+		}
+		
+		double millis = (t2 - t1) / 1000000.0;
+		
+		synchronized (runTimes) {
+			runTimes[id] = millis;
+		}
+	}
+}
+
+

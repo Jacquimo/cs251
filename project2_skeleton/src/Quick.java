@@ -207,7 +207,7 @@ public class Quick extends Sort {
 		// in the left subarray. The values wihtin the two boundaries are the only values that actually
 		// need to be be merged together, significantly reducing running time.
 		
-		while (((leftRelevantRange > left) && a[rightCounter].compareTo(a[leftRelevantRange]) <= 0) || 
+		/*while (((leftRelevantRange > left) && a[rightCounter].compareTo(a[leftRelevantRange]) <= 0) || 
 				((rightRelevantRange < right) && a[rightRelevantRange].compareTo(a[mid]) <= 0)) {
 			if (leftRelevantRange > left) 
 				--leftRelevantRange;
@@ -215,19 +215,19 @@ public class Quick extends Sort {
 				++rightRelevantRange;
 		}
 	
-		Quick.merge(a, leftRelevantRange, mid, rightRelevantRange, true);
+		Quick.merge(a, leftRelevantRange, mid, rightRelevantRange, true);*/
 		
 		
 		
 		
-		/*while (leftRelevantRange > left && a[rightCounter].compareTo(a[leftRelevantRange]) <= 0) {
+		while (leftRelevantRange > left && a[rightCounter].compareTo(a[leftRelevantRange]) <= 0) {
 			--leftRelevantRange;
 		}
 	
 		while(rightRelevantRange < right && a[rightRelevantRange].compareTo(a[mid]) <= 0)
 			++rightRelevantRange;
 	
-		Quick.merge(a, leftRelevantRange, mid, rightRelevantRange, true);*/
+		Quick.merge(a, leftRelevantRange, mid, rightRelevantRange, true);
 		
 		
 		
