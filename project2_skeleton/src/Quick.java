@@ -26,7 +26,7 @@ public class Quick extends Sort {
 	public static void sort(Comparable[] a) {
 		// quicksort(a, 0, a.length - 1);
 
-		int lengthOfDiv = a.length / ThreadQuick.MAX_THREADS;
+		/*int lengthOfDiv = a.length / ThreadQuick.MAX_THREADS;
 		ThreadQuick[] threads = new ThreadQuick[ThreadQuick.MAX_THREADS + 2];
 		for (int i = 0; i < ThreadQuick.MAX_THREADS; ++i) {
 			threads[i] =  new ThreadQuick(a, i * lengthOfDiv, (i + 1) * lengthOfDiv - 1, false);
@@ -61,7 +61,42 @@ public class Quick extends Sort {
 		//
 		do {
 			
-		} while (true);
+		} while (true);*/
+		
+		int lengthOfDiv = a.length / ThreadQuick.MAX_THREADS;
+		ThreadQuick[] threads = new ThreadQuick[ThreadQuick.MAX_THREADS + 2];
+		for (int i = 0; i < ThreadQuick.MAX_THREADS; ++i) {
+			System.out.printf("Number of active threads: %d\n", Thread.activeCount());
+			threads[i] =  new ThreadQuick(a, i * lengthOfDiv, (i + 1) * lengthOfDiv - 1, false);
+			threads[i].start();
+		}
+		
+		// Wait for the last thread to finish
+		try {
+			threads[3].join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		threads[4] = new ThreadQuick(a, 0, lengthOfDiv*2 - 1, true); threads[4].start();
+		threads[5] = new ThreadQuick(a, lengthOfDiv*2, a.length-1, true); threads[5].start();
+		try {
+			threads[4].join();
+			threads[5].join();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		threads[0] = new ThreadQuick(a, 0, a.length - 1, true); threads[0].start();
+		
+		try {
+			threads[0].join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//Sort.show(a);
 	}
 
 	public static void quicksort(Comparable[] a, int left, int right) {
@@ -416,6 +451,7 @@ class ThreadQuick extends Thread {
 		array = a;
 		left = l;
 		right = r;
+		merge = m;
 	}
 
 	@Override
