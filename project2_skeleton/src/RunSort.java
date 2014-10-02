@@ -101,16 +101,25 @@ public class RunSort {
 			//duplicateData[i] = Arrays.copyOf(data, data.length);
 		
 		long total1 = System.nanoTime();
+		ThreadSorts lastThread = null;
 
 		// run sort on data
 		// double[] runTimes = new double[iterations];
 		// double totalRuntime = 0;
 		// Comparable[] duplicateData = Arrays.copyOf(data, data.length);
 
+		ThreadSorts.lock = new Object[iterations];
 		for (int i = 0; i < iterations; ++i) {
-			if (ThreadSorts.activeCount() < ThreadSorts.MAX_THREADS)
-				(new ThreadSorts(Arrays.copyOf(data, data.length), iterations, alg, d, i + "")).start();
-			/*else {
+			//synchronized (ThreadSorts.obj) {
+				StdOut.printf("Number of active threads: %d\n", ThreadSorts.activeCount());
+			//}
+			
+			//if (ThreadSorts.activeCount() < ThreadSorts.MAX_THREADS) {
+				lastThread = new ThreadSorts(Arrays.copyOf(data, data.length), iterations, alg, d, i + "");
+				ThreadSorts.lock[i] = new Object(); 
+				lastThread.start();
+			/*}
+			else {
 				Comparable[] duplicateData = Arrays.copyOf(data, data.length);
 				
 				long t1 = System.nanoTime();
@@ -158,23 +167,24 @@ public class RunSort {
 				}
 
 				double millis = (t2 - t1) / 1000000.0;
-				ThreadSorts.runTimes[i] = millis;*/
+				ThreadSorts.runTimes[i] = millis;
 				//totalRuntime += millis;
 
 				//duplicateData = Arrays.copyOf(data, data.length);
-			//}
+			}*/
 		}
 		
-		long total2 = System.nanoTime();
-		
 		try {
-			synchronized (ThreadSorts.threads[7]) {
-				ThreadSorts.threads[7].join(); // Wait until the last thread is finished
-			}
+			//synchronized (lastThread) {
+				lastThread.join(); // Wait until the last thread is finished
+			//}
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		long total2 = System.nanoTime();
+		
 		double totalRuntime = 0;
 		for (int i = 0; i < iterations; ++i)
 			totalRuntime += ThreadSorts.runTimes[i];
@@ -203,11 +213,18 @@ public class RunSort {
 	
 }
 
+
+
+
+
 class ThreadSorts extends Thread {
 	final static int MAX_THREADS = Runtime.getRuntime().availableProcessors();
-	public static double[] runTimes = null;
+	public static volatile double[] runTimes = null;
 	public static int iterations = 0;
-	public static ThreadSorts[] threads = null;
+	public static volatile ThreadSorts[] threads = null;
+	public static int numThreadsRunning = 0;
+	public static Object[] lock;
+	
 	
 	private Comparable[] data;
 	private RunSort.Algorithm alg;
@@ -225,17 +242,25 @@ class ThreadSorts extends Thread {
 			runTimes = new double[iterations];
 		if (threads == null)
 			threads = new ThreadSorts[iterations];
+		if (lock == null)
+			lock = new Object[iterations];
 	}
 	
 	@Override
 	public void start() {
-		this.run();
+		/*synchronized (obj) {
+			++numThreadsRunning;
+		}*/
+		super.start();
+		/*synchronized (obj) {
+			--numThreadsRunning;
+		}*/
 	}
 	
 	@Override
 	public void run() {
 		int id = Integer.parseInt(super.getName());
-		synchronized (threads) {
+		synchronized (lock[id]) {
 			threads[id] = this;
 		}
 		
@@ -285,7 +310,7 @@ class ThreadSorts extends Thread {
 		
 		double millis = (t2 - t1) / 1000000.0;
 		
-		synchronized (runTimes) {
+		synchronized (lock[id]) {
 			runTimes[id] = millis;
 		}
 	}
