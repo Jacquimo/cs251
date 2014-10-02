@@ -86,6 +86,12 @@ public class RunSort {
 			}
 		}
 		
+		
+		
+		
+		
+		
+		
 		// read all data
 		Comparable[] data = null;
 		int[] int_data = StdIn.readAllInts();
@@ -94,10 +100,10 @@ public class RunSort {
 			data[i] = int_data[i];
 		
 		// Make multiple copies of the data
-		Comparable[][] duplicateData = new Comparable[iterations][data.length];
-		for (int i = 0; i < iterations - 1; ++i)
+		Comparable[] duplicateData = Arrays.copyOf(data, data.length);
+		/*for (int i = 0; i < iterations - 1; ++i)
 			duplicateData[i] = Arrays.copyOf(data, data.length);
-		duplicateData[iterations-1] = data;
+		duplicateData[iterations-1] = data;*/
 		
 		
 		// run sort on data
@@ -111,17 +117,17 @@ public class RunSort {
 				switch (alg) {
 				default:
 				case Selection:
-					LSelection.sort(duplicateData[i], d);
+					LSelection.sort(duplicateData, d);
 					break;
 				case Merge:
-					LMerge.sort(duplicateData[i], d);
+					LMerge.sort(duplicateData, d);
 					break;
 				case Heap:
-					LHeap.sort(duplicateData[i], d);
+					LHeap.sort(duplicateData, d);
 					break;
 				case Quick:
 					// No location-aware considered for Quicksort
-					Quick.sort(duplicateData[i]);
+					Quick.sort(duplicateData);
 					break;
 				}
 			} else {
@@ -129,22 +135,22 @@ public class RunSort {
 				switch (alg) {
 				default:
 				case Selection:
-					Selection.sort(duplicateData[i]);
+					Selection.sort(duplicateData);
 					break;
 				case Merge:
-					Merge.sort(duplicateData[i]);
+					Merge.sort(duplicateData);
 					break;
 				case Heap:
-					Heap.sort(duplicateData[i]);
+					Heap.sort(duplicateData);
 					break;
 				case Quick:
-					Quick.sort(duplicateData[i]);
+					Quick.sort(duplicateData);
 					break;
 				}
 			}
 			long t2 = System.nanoTime();
 			
-			if (!Sort.isSorted(duplicateData[i])) {
+			if (!Sort.isSorted(duplicateData)) {
 				StdOut.print("Sort failed.");
 				return;
 			}
@@ -152,6 +158,8 @@ public class RunSort {
 			double millis = (t2 - t1) / 1000000.0;
 			runTimes[i] = millis;
 			totalRuntime += millis;
+			
+			duplicateData = Arrays.copyOf(data, data.length);
 		}
 
 		// StdOut.printf("%.4f\n",millis);
