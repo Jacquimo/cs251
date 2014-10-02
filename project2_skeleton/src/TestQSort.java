@@ -1,4 +1,4 @@
-import java.util.*;
+import java.util.Random;
 
 public class TestQSort {
 	public static boolean aIsA = true;
@@ -10,8 +10,8 @@ public class TestQSort {
 		for (int i = 0; i < a.length; ++i)
 			a[i] = g.nextInt(20) + 1;
 		
-		/*printArray(a, -1, 0, a.length - 1);
-		Quick.sort(a);
+		printArray(a, -1, 0, a.length - 1);
+		/*Quick.sort(a);
 		System.out.printf("The final array after calling quicksort is:\n");
 		printArray(a, -1, 0, a.length - 1);*/
 		

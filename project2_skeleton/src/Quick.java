@@ -207,18 +207,6 @@ public class Quick extends Sort {
 		// in the left subarray. The values wihtin the two boundaries are the only values that actually
 		// need to be be merged together, significantly reducing running time.
 		
-		/*while (((leftRelevantRange > left) && a[rightCounter].compareTo(a[leftRelevantRange]) <= 0) || 
-				((rightRelevantRange < right) && a[rightRelevantRange].compareTo(a[mid]) <= 0)) {
-			if (leftRelevantRange > left) 
-				--leftRelevantRange;
-			if (rightRelevantRange < right) 
-				++rightRelevantRange;
-		}
-	
-		Quick.merge(a, leftRelevantRange, mid, rightRelevantRange, true);*/
-		
-		
-		
 		
 		while (leftRelevantRange > left && a[rightCounter].compareTo(a[leftRelevantRange]) <= 0) {
 			--leftRelevantRange;
@@ -231,9 +219,56 @@ public class Quick extends Sort {
 		
 		
 		
+		
+		
+		/*while (((leftRelevantRange > left) && a[rightCounter].compareTo(a[leftRelevantRange]) <= 0) || 
+				((rightRelevantRange < right) && a[rightRelevantRange].compareTo(a[mid]) <= 0)) {
+			if (a[rightCounter].compareTo(a[leftRelevantRange]) <= 0) {
+				//--leftRelevantRange;
+				leftRelevantRange -= (leftRelevantRange - left) / 4;
+			}
+			else {
+				++leftRelevantRange;
+			}
+			if (a[rightRelevantRange].compareTo(a[mid]) <= 0) {
+				//++rightRelevantRange;
+				rightRelevantRange += (right - rightRelevantRange) / 4;
+			}
+			else {
+				--rightRelevantRange;
+			}
+		}
+	
+		Quick.merge(a, leftRelevantRange, mid, rightRelevantRange, true);*/
+		
+		
+		
+		
+		
+		
+		
+		/*while (((leftRelevantRange > left) && a[rightCounter].compareTo(a[leftRelevantRange]) <= 0) || 
+				((rightRelevantRange < right) && a[rightRelevantRange].compareTo(a[mid]) <= 0)) {
+			if (leftRelevantRange > left)
+				--leftRelevantRange;
+			
+			if (rightRelevantRange < right)
+				++rightRelevantRange;
+		}
+		
+		Quick.merge(a, leftRelevantRange, mid, rightRelevantRange, true);*/
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		// The following merge implementation is a combination of the relevant range algorithm used
 		// above and the "standard" in-place merge. It is nearly as fast as the purley relevant range
-		// algorithm shown above, yet the extra comparisons likely slow it down.
+		// algorithm shown above, yet the extra comparisons (likely) slow it down.
 		
 		/*while (leftCounter <= mid && rightCounter <= right) {
 			// Expand the bounds of the relevant range
@@ -386,14 +421,17 @@ class ThreadQuick extends Thread {
 	@Override
 	public void run() {
 		if (!merge) {
-			++ThreadQuick.num_threads;
+			//++ThreadQuick.num_threads;
 			Quick.quicksort(array, left, right);
-			--ThreadQuick.num_threads;
+			//--ThreadQuick.num_threads;
+		}
+		else {
+			Quick.merge(array, left, (left + right) / 2 , right);
 		}
 	}
 
 	@Override
 	public void start() {
-		this.run();
+		super.run();
 	}
 }

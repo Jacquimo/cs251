@@ -101,7 +101,7 @@ public class RunSort {
 			//duplicateData[i] = Arrays.copyOf(data, data.length);
 		
 		long total1 = System.nanoTime();
-		ThreadSorts lastThread = null;
+		ThreadSorts lastThread = new ThreadSorts(Arrays.copyOf(data, data.length), iterations, alg, d, 0 + "");;
 
 		// run sort on data
 		// double[] runTimes = new double[iterations];
@@ -109,17 +109,13 @@ public class RunSort {
 		// Comparable[] duplicateData = Arrays.copyOf(data, data.length);
 
 		ThreadSorts.lock = new Object[iterations];
-		for (int i = 0; i < iterations; ++i) {
-			//synchronized (ThreadSorts.obj) {
-				StdOut.printf("Number of active threads: %d\n", ThreadSorts.activeCount());
-			//}
-			
+		for (int i = 0; i < iterations; ++i) {			
 			//if (ThreadSorts.activeCount() < ThreadSorts.MAX_THREADS) {
-				lastThread = new ThreadSorts(Arrays.copyOf(data, data.length), iterations, alg, d, i + "");
-				ThreadSorts.lock[i] = new Object(); 
-				lastThread.start();
-			/*}
-			else {
+				//lastThread = new ThreadSorts(Arrays.copyOf(data, data.length), iterations, alg, d, i + "");
+				//ThreadSorts.lock[i] = new Object(); 
+				//lastThread.start();
+			//}
+			//else {
 				Comparable[] duplicateData = Arrays.copyOf(data, data.length);
 				
 				long t1 = System.nanoTime();
@@ -171,16 +167,17 @@ public class RunSort {
 				//totalRuntime += millis;
 
 				//duplicateData = Arrays.copyOf(data, data.length);
-			}*/
-		}
-		
-		try {
-			//synchronized (lastThread) {
-				lastThread.join(); // Wait until the last thread is finished
 			//}
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		}
+		for (int i = 0; i < iterations; ++i) {
+			try {
+				// synchronized (lastThread) {
+				if (ThreadSorts.threads[i] != null) ThreadSorts.threads[i].join(); // Wait until the last thread is finished
+				// }
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 		long total2 = System.nanoTime();
@@ -194,7 +191,7 @@ public class RunSort {
 		double variance = 0;
 		for (int i = 0; i < iterations; ++i) {
 			variance += Math.pow((ThreadSorts.runTimes[i] - mean), 2) ;//* (runTimes[i] - mean);
-			StdOut.printf("Run %d: %.4f ms\n", i + 1, ThreadSorts.runTimes[i]);
+			//StdOut.printf("Run %d: %.4f ms\n", i + 1, ThreadSorts.runTimes[i]);
 		}
 		variance /= (iterations - 1);
 		double std = Math.sqrt(variance);
@@ -209,8 +206,6 @@ public class RunSort {
 		
 		System.setIn(System.in);
 	}
-	
-	
 }
 
 

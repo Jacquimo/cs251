@@ -27,18 +27,17 @@ public class Merge extends Sort {
 		//Merge.mergesort(a, Arrays.copyOf(a, a.length), 0, a.length - 1);
 		//TestQSort.msort(a, new Comparable[a.length], 0, a.length - 1);
 		
-		Merge.mergesort(a, null, 0, a.length - 1);
+		Merge.mergesort(a, 0, a.length - 1);
 		//Sort.show(a);
 	}
 	
 	/**
 	 * 
 	 * @param a - the array
-	 * @param aux - the auxiliary helper array
 	 * @param left - starting index of left part of array to sort
 	 * @param right - starting index of right part of array to sort
 	 */
-	public static void mergesort(Comparable[] a, Comparable[] aux, int left, int right) {
+	public static void mergesort(Comparable[] a, int left, int right) {
 		if (right <= left) return;
 		
 		if (right - left <= 16) {
@@ -59,12 +58,12 @@ public class Merge extends Sort {
 		Merge.merge(aux, a, left, middle, right);*/
 		
 		// Calling Mergesort without having to use an auxiliary array
-		Merge.mergesort(a, null, left, middle);
-		Merge.mergesort(a, null, middle+1, right);
-		Quick.merge(a, left, middle, right);
+		Merge.mergesort(a, left, middle);
+		Merge.mergesort(a, middle+1, right);
+		merge(a, left, middle, right);
 	}
 	
-	public static void merge(Comparable[] a, Comparable[] aux, int left, int mid, int right) {
+	//public static void merge(Comparable[] a, Comparable[] aux, int left, int mid, int right) {
 		/*for (int k = left; k <= right; ++k)
 			aux[k] = a[k];
 		
@@ -76,12 +75,43 @@ public class Merge extends Sort {
 			else a[k] = aux[i++];
 		}*/
 		
-		int i = left, j = mid+1;
+		/*int i = left, j = mid+1;
 		for (int k = left; k <= right; ++k) {
 			if (i > mid) aux[k] = a[j++];
 			else if (j > right) aux[k] = a[i++];
 			else if (Sort.less(a[j], a[i])) aux[k] = a[j++];
 			else aux[k] = a[i++];
+		}
+	}*/
+	
+	public static void merge(Comparable[] a, int left, int mid, int right) {
+		int leftCounter = left, rightCounter = mid + 1;
+		int leftRelevantRange = mid , rightRelevantRange = mid+1;
+		
+		
+		while (leftRelevantRange > left && a[rightCounter].compareTo(a[leftRelevantRange]) <= 0) {
+			--leftRelevantRange;
+		}
+	
+		while(rightRelevantRange < right && a[rightRelevantRange].compareTo(a[mid]) <= 0)
+			++rightRelevantRange;
+	
+		Merge.merge(a, leftRelevantRange, mid, rightRelevantRange, true);
+	}
+	
+	public static void merge(Comparable[] a, int left, int mid, int right, boolean foundRelevantRange) {
+		if (a[mid].compareTo(a[mid+1]) <= 0) return;
+		int leftCounter = left, rightCounter = mid + 1, leftRelevantRange = mid - 1;
+		
+		while (leftCounter <= mid && rightCounter <= right) {
+			if (a[leftCounter].compareTo(a[rightCounter]) <= 0)
+				++leftCounter;
+			else { 
+				Comparable elementToMove = a[rightCounter];
+				System.arraycopy(a, leftCounter, a, leftCounter+1, rightCounter-leftCounter);
+				a[leftCounter] = elementToMove;
+				++leftCounter; ++mid; ++rightCounter;
+			}
 		}
 	}
 	
