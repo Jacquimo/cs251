@@ -8,7 +8,7 @@
  * TODO this code is from the implementation given in the lecture slides
  * 
  * @author ghousto
- * @version 9/25/14
+ * @version 10/01/14
  * @pso   P06
  *
  */
@@ -28,6 +28,7 @@ public class Merge extends Sort {
 		//TestQSort.msort(a, new Comparable[a.length], 0, a.length - 1);
 		
 		Merge.mergesort(a, null, 0, a.length - 1);
+		//Sort.show(a);
 	}
 	
 	/**
@@ -57,6 +58,7 @@ public class Merge extends Sort {
 		Merge.mergesort(aux, a, middle+1, right);
 		Merge.merge(aux, a, left, middle, right);*/
 		
+		// Calling Mergesort without having to use an auxiliary array
 		Merge.mergesort(a, null, left, middle);
 		Merge.mergesort(a, null, middle+1, right);
 		Quick.merge(a, left, middle, right);

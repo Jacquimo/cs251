@@ -190,21 +190,157 @@ public class Quick extends Sort {
 	 * @param right - rightmost index of values in right-hand group
 	 */
 	public static void merge(Comparable[] a, int left, int mid, int right) {
-		int l = left, r = mid + 1;
+		//if (right <= mid) return;
+		int leftCounter = left, rightCounter = mid + 1;
+		int leftRelevantRange = mid - 1, rightRelevantRange = mid+2;
 		
 		// Check to see if we can skip the merge
 		// This check is beneficial since this method won't be called recursively (i.e. only add 1 extra comparison)
-		if (a[mid].compareTo(a[r]) <= 0) 
+		if (a[mid].compareTo(a[rightCounter]) <= 0) 
 			return;
 		
-		while (l <= mid && r <= right) {
-			if (a[l].compareTo(a[r]) <= 0)
-				++l;
+		// The folowing code is an algorithm I created my self which I call "Relevant Range". The
+		// boundaries of the range are expanded until the value at the left boundary is the largest
+		// value on the left smaller than the smallest element in the right subarray and the value
+		// at the right boundary is the smallest number on the right greater than the largest element
+		// in the left subarray. The values wihtin the two boundaries are the only values that actually
+		// need to be be merged together, significantly reducing running time.
+		
+		while (leftRelevantRange > left && a[rightCounter].compareTo(a[leftRelevantRange]) <= 0) {
+			--leftRelevantRange;
+		}
+	
+		while(rightRelevantRange < right && a[rightRelevantRange].compareTo(a[mid]) <= 0)
+			++rightRelevantRange;
+	
+		Quick.merge(a, leftRelevantRange, mid, rightRelevantRange, true);
+		
+		
+		
+		// The following merge implementation is a combination of the relevant range algorithm used
+		// above and the "standard" in-place merge. It is nearly as fast as the purley relevant range
+		// algorithm shown above, yet the extra comparisons likely slow it down.
+		
+		/*while (leftCounter <= mid && rightCounter <= right) {
+			// Expand the bounds of the relevant range
+			// Unless both of the boundaries have been found, expand both boundaries outwards
+			if (a[rightCounter].compareTo(a[leftRelevantRange]) <= 0 || a[rightRelevantRange].compareTo(a[mid]) <= 0) {
+				if (leftRelevantRange > left) --leftRelevantRange;
+				if (rightRelevantRange < right) ++rightRelevantRange;
+			}
+			else { // both boundaries have been found
+				break;
+			}
+			
+			// Perform normal calculations/adjustments for in-place merge
+			if (a[leftCounter].compareTo(a[rightCounter]) <= 0)
+				++leftCounter;
 			else { 
-				Comparable tmp = a[r];
-				System.arraycopy(a, l, a, l+1, r-l);
-				a[l] = tmp;
-				++l; ++mid; ++r;
+				Comparable elementToMove = a[rightCounter];
+				// Shift over the elements starting at leftCounter (inclusive) ending at
+				// rightCounter (exclusive) by 1 index to the right
+				System.arraycopy(a, leftCounter, a, leftCounter+1, rightCounter-leftCounter);
+				a[leftCounter] = elementToMove;
+				++leftCounter; ++mid; ++rightCounter;
+			}
+		}
+		// At this point, check if the relevant range has been found, otherwise the arrays have been merged
+		//if (leftCounter <= mid && rightCounter <= right)
+			Quick.merge(a, leftRelevantRange, mid, rightRelevantRange, true);*/
+		
+		
+		
+		
+		/*boolean leftBoundFound  = false;
+		boolean rightBoundFound = false;
+		
+		// works on the assumption that the relevant range will be found before the left subarray is traversed
+		while (leftCounter <= mid && rightCounter <= right) {
+			// Expand the bounds of the relevant range
+			// expand left bound
+			if (!leftBoundFound) {
+				if (a[rightCounter].compareTo(a[leftRelevantRange]) <= 0) {
+					if (leftRelevantRange == left)
+						leftBoundFound = true;
+					--leftRelevantRange;
+				}
+				else {
+					if (rightBoundFound) // the whole relevant range has been found
+						break;
+					else
+						leftBoundFound = true;
+				}
+			}
+			// expand right bound
+			if (!rightBoundFound) {
+				if (a[rightRelevantRange].compareTo(a[mid]) <= 0) {
+					if (rightRelevantRange == right)
+						rightBoundFound = true;
+					++rightRelevantRange;
+				}
+				else {
+					if (leftBoundFound)
+						break; // the whole relevant range has been found
+					else {
+						rightBoundFound = true;
+					}
+				}
+			}
+			
+			// Perform normal calculations/adjustments for in-place merge
+			if (a[leftCounter].compareTo(a[rightCounter]) <= 0)
+				++leftCounter;
+			else { 
+				Comparable elementToMove = a[rightCounter];
+				// Shift over the elements starting at leftCounter (inclusive) ending at
+				// rightCounter (exclusive) by 1 index to the right
+				System.arraycopy(a, leftCounter, a, leftCounter+1, rightCounter-leftCounter);
+				a[leftCounter] = elementToMove;
+				++leftCounter; ++mid; ++rightCounter;
+			}
+		}
+		// At this point, check if the relevant range has been found, otherwise the arrays have been merged
+		if (leftCounter <= mid && rightCounter <= right)
+			Quick.merge(a, leftRelevantRange, mid, rightRelevantRange, true);*/
+		
+		
+		
+		
+		/*while (leftCounter <= mid && rightCounter <= right) {
+			if (a[leftRelevantRange].compareTo(a[rightRelevantRange]) <= 0) {
+				Quick.mergeRelevantRange(a, leftRelevantRange, mid, rightRelevantRange, true);
+				return;
+			}
+			else {
+				--leftRelevantRange;
+				++rightRelevantRange;
+			}
+			
+			if (a[leftCounter].compareTo(a[rightCounter]) <= 0)
+				++leftCounter;
+			else { 
+				Comparable elementToMove = a[rightCounter];
+				// Shift over the elements starting at leftCounter (inclusive) ending at
+				// rightCounter (exclusive) by 1 index to the right
+				System.arraycopy(a, leftCounter, a, leftCounter+1, rightCounter-leftCounter);
+				a[leftCounter] = elementToMove;
+				++leftCounter; ++mid; ++rightCounter;
+			}
+		}*/
+	}
+	
+	
+	public static void merge(Comparable[] a, int left, int mid, int right, boolean foundRelevantRange) {
+		int leftCounter = left, rightCounter = mid + 1, leftRelevantRange = mid - 1;
+		
+		while (leftCounter <= mid && rightCounter <= right) {
+			if (a[leftCounter].compareTo(a[rightCounter]) <= 0)
+				++leftCounter;
+			else { 
+				Comparable elementToMove = a[rightCounter];
+				System.arraycopy(a, leftCounter, a, leftCounter+1, rightCounter-leftCounter);
+				a[leftCounter] = elementToMove;
+				++leftCounter; ++mid; ++rightCounter;
 			}
 		}
 	}
