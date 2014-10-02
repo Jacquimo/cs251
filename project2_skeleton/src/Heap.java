@@ -12,7 +12,7 @@
  * 
  * 
  * @author ghousto
- * @version 9/22/14
+ * @version 10/2/14
  * @pso   P06
  *
  */
@@ -34,7 +34,7 @@ public class Heap extends Sort {
 			a[i] = delMax(extra, i);
 		}*/
 		
-		buildHeap(a);
+		buildMaxHeap(a);
 		//StdOut.printf("Was \"a\" made into a heap? %s\n", isHeap(a, 0, a.length-1));
 		for (int i = a.length - 1; i >= 0; --i) {
 			a[i] = delMax(a, i);
@@ -58,7 +58,7 @@ public class Heap extends Sort {
 			return false;
 	}
 	
-	public static void buildHeap(Comparable[] a) {
+	public static void buildMaxHeap(Comparable[] a) {
 		for (int k = a.length / 2; k >= 0; --k) {
 			sink(a, k, a.length - 1);
 		}
