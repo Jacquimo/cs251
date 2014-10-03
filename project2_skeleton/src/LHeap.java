@@ -41,9 +41,18 @@ public class LHeap extends Sort {
 		for (int i = 0; i < 2*d; ++i) {
 			System.out.printf("%d ", (int)a[i]);
 		}
-		System.out.printf("\nAfter the first small heap is made\n");
+		System.out.printf("\nThe initial distribution of the array start\n");
 		
 		buildHeap(a, 0, d);
+		
+		for (int i = 0; i < 2*d; ++i) {
+			System.out.printf("%d ", (int)a[i]);
+		}
+		System.out.printf("\nAfter the first small heap is made\n");
+		
+		for (int i = 0; i <= d; ++i) {
+			a[i] = delMin(a, i, d); 
+		}
 		
 		for (int i = 0; i < 2*d; ++i) {
 			System.out.printf("%d ", (int)a[i]);
@@ -58,20 +67,30 @@ public class LHeap extends Sort {
 		}*/
 		
 		// Do bottom-up heapify, runs in O(log n) time
-		for (int k = right / 2 - 1; k >= left; --k) {
-			sink(a, left, right);
+		for (int k = (right - left) / 2; k >= 0; --k) {
+			sink(a, k, left, right);
 		}
 	}
 	
-	public static void sink(Comparable[] a, int left, int right) {		
-		int k = 0;
+	// Create the heap with the root on the right hand side so that we can insert the min on the left-hand side
+	// The values of k are determined as if they start at the 0 index and are going left to right. Adjust the values
+	// of k and j when you actually need to access the elements inside the array
+	public static void sink(Comparable[] a, int k, int left, int right) {		
+		//int k = 0;
 		while(2*k < right - left) {		// Make sure THIS element isn't out of bounds
 			int j = 2*k+1;
-			if (j < right - left && less(a[j+1 + left], a[j + left])) ++j; // Determine which child is smaller
-			if (a[k + left].compareTo(a[j + left]) <= 0) break;		// If the parent is smaller than child, you've found the right spot
-			Sort.exch(a, k + left, j + left);
+			if (j < right - left && less(a[right - (j+1)], a[right - j])) ++j; // Determine which child is smaller
+			if (a[right - k].compareTo(a[right - j]) <= 0) break;		// If the parent is smaller than child, you've found the right spot
+			Sort.exch(a, right - k, right - j);
 			k = j;
 		}
+	}
+	
+	public static Comparable delMin(Comparable[] a, int left, int right) {
+		Comparable ret = a[right];
+		a[right] = a[left];
+		sink(a, 0, left, right);
+		return ret;
 	}
 	
 	
