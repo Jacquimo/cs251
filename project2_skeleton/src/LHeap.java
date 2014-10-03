@@ -1,4 +1,3 @@
-import java.util.Arrays;
 
 
 /**
@@ -10,6 +9,8 @@ import java.util.Arrays;
  *
  */
 public class LHeap extends Sort {
+	public static int rootIndex;
+	
 	/**
 	 * this class should not be instantiated
 	 */
@@ -22,7 +23,7 @@ public class LHeap extends Sort {
 	 */
 	public static void sort(Comparable[] a, int d) {
 		//d = a.length-1;
-		Comparable[] extra = new Comparable[d+1];
+		/*Comparable[] extra = new Comparable[d+1];
 		int index = a.length-1;
 		for (int i = d; i >= 0; --i){ // copy over the first d+1 elements, keeping track of where to get the next element
 			extra[i] = a[index--];
@@ -37,20 +38,28 @@ public class LHeap extends Sort {
 			}
 			else
 				a[i] = delMax(extra, i);
-		}
+		}*/
+		
+		rootIndex = buildHeap(a, d);
 	}
 	
-	public static void buildHeap(Comparable[] a) {
-		for (int k = a.length / 2; k >= 0; --k) {
+	public static int buildHeap(Comparable[] a, int d) {
+		/*for (int k = a.length / 2; k >= 0; --k) {
 			sink(a, k);
+		}*/
+		
+		// Create a heap whose roots starts at a.length - d - 1
+		for (int k = a.length - d / 2 - 1; k < a.length; ++k) {
+			sink(a, k, a.length-1);
 		}
+		return a.length - d - 1;
 	}
 	
 	public static Comparable delMax(Comparable[] a, int lastIndex) {
-		Comparable ret = a[0];
-		a[0] = a[lastIndex];
-		a[lastIndex] = null;
-		sink(a, 0);
+		Comparable ret = a[rootIndex];
+		a[rootIndex] = a[lastIndex];
+		//a[lastIndex] = null;
+		sink(a, rootIndex, lastIndex);
 		
 		return ret;
 	}
@@ -72,30 +81,32 @@ public class LHeap extends Sort {
 	}
 	
 	// a pre-condition for this method is that it will never be called on a leaf. Otherwise, there will likely be an exception
-	public static void sink(Comparable[] a, int k) {
-		if (!canHaveChildren(a,k)) return;
-		
-		Comparable left = a[2*k+1];
-		Comparable right = 2*k+2 < a.length ? a[2*k+2] : null;
-		
-		Comparable largerChild;
-		boolean leftIsLarger = false;;
-		if (left == null) {largerChild = right; leftIsLarger = false; }
-		else if (right == null) {largerChild = left; leftIsLarger = true; }
-		//else if (left == null && right == null) largerChild = null;
-		else {
-			largerChild = Sort.less(left, right) ? right : left;
-			leftIsLarger = Sort.equal(largerChild, left);
-		}
-		
-		if (largerChild != null && Sort.less(a[k], largerChild)) { // if a[k] is less than its larger child, keep sinking
-			Sort.exch(a, k, leftIsLarger ? 2*k+1 : 2*k+2);
-			if (canHaveChildren(a, leftIsLarger ? 2*k+1 : 2*k+2))
-				sink(a, leftIsLarger ? 2*k+1 : 2*k+2);
+	public static void sink(Comparable[] a, int root, int maxIndex) {
+		int k = 0;
+		while(2*k < maxIndex) {
+			int j = 2*k+1;
+			if (j < maxIndex && less(a[j], a[j+1])) ++j;
+			if (a[root+k].compareTo(a[root+j]) > 0) break;
+			Sort.exch(a, root+k, root+j);
+			root = root + j - k;
 		}
 	}
 	
 	public static boolean canHaveChildren(Comparable[] a, int k) {
 		return 2*k+1 < a.length;
+	}
+	
+	public static boolean isHeap(Comparable[] a, int k, int maxIndex) {		
+		if (2*k >= maxIndex)
+			return true;
+			
+		int i = 2*k+1;
+		if (i < maxIndex && less(i, i+1)) ++i;
+		if (a[k].compareTo(a[i]) < 0) return false;
+			
+		if (isHeap(a, 2*k+1, maxIndex))
+			return isHeap(a, 2*k+2, maxIndex);
+		else
+			return false;
 	}
 }
