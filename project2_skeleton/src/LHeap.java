@@ -21,7 +21,7 @@ public class LHeap extends Sort {
 	 */
 	public static void sort(Comparable[] a, int d) {
 		//d = a.length-1;
-		Comparable[] extra = new Comparable[d+1];
+		/*Comparable[] extra = new Comparable[d+1];
 		int index = a.length-1;
 		for (int i = d; i >= 0; --i){ // copy over the first d+1 elements, keeping track of where to get the next element
 			extra[i] = a[index--];
@@ -36,10 +36,46 @@ public class LHeap extends Sort {
 			}
 			else
 				a[i] = delMax(extra, i);
+		}*/
+		
+		for (int i = 0; i < 2*d; ++i) {
+			System.out.printf("%d ", (int)a[i]);
+		}
+		System.out.printf("\nAfter the first small heap is made\n");
+		
+		buildHeap(a, 0, d);
+		
+		for (int i = 0; i < 2*d; ++i) {
+			System.out.printf("%d ", (int)a[i]);
 		}
 	}
 	
-	public static void buildHeap(Comparable[] a) {
+	
+	// Build the (relatively) small min-heap within the array that is to be sorted
+	public static void buildHeap(Comparable[] a, int left, int right) {
+		/*for (int k = a.length / 2 - 1; k >= 0; --k) {
+			sink(a, k, a.length - 1);
+		}*/
+		
+		// Do bottom-up heapify, runs in O(log n) time
+		for (int k = right / 2 - 1; k >= left; --k) {
+			sink(a, left, right);
+		}
+	}
+	
+	public static void sink(Comparable[] a, int left, int right) {		
+		int k = 0;
+		while(2*k < right - left) {
+			int j = 2*k+1;
+			if (j < right - left && less(a[j+1 + left], a[j + left])) ++j;
+			if (a[k + left].compareTo(a[j + left]) <= 0) break;
+			Sort.exch(a, k + left, j + left);
+			k = j;
+		}
+	}
+	
+	
+	/*public static void buildHeap(Comparable[] a) {
 		for (int k = a.length / 2; k >= 0; --k) {
 			sink(a, k);
 		}
@@ -96,5 +132,5 @@ public class LHeap extends Sort {
 	
 	public static boolean canHaveChildren(Comparable[] a, int k) {
 		return 2*k+1 < a.length;
-	}
+	}*/
 }
