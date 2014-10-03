@@ -65,10 +65,10 @@ public class LHeap extends Sort {
 	
 	public static void sink(Comparable[] a, int left, int right) {		
 		int k = 0;
-		while(2*k < right - left) {
+		while(2*k < right - left) {		// Make sure THIS element isn't out of bounds
 			int j = 2*k+1;
-			if (j < right - left && less(a[j+1 + left], a[j + left])) ++j;
-			if (a[k + left].compareTo(a[j + left]) <= 0) break;
+			if (j < right - left && less(a[j+1 + left], a[j + left])) ++j; // Determine which child is smaller
+			if (a[k + left].compareTo(a[j + left]) <= 0) break;		// If the parent is smaller than child, you've found the right spot
 			Sort.exch(a, k + left, j + left);
 			k = j;
 		}
