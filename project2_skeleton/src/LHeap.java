@@ -38,7 +38,7 @@ public class LHeap extends Sort {
 				a[i] = delMax(extra, i);
 		}*/
 		
-		for (int i = 0; i < 2*d; ++i) {
+		/*for (int i = 0; i < 2*d; ++i) {
 			System.out.printf("%d ", (int)a[i]);
 		}
 		System.out.printf("\nThe initial distribution of the array start\n");
@@ -56,7 +56,7 @@ public class LHeap extends Sort {
 		
 		for (int i = 0; i < 2*d; ++i) {
 			System.out.printf("%d ", (int)a[i]);
-		}
+		}*/
 	}
 	
 	
