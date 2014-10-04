@@ -57,11 +57,49 @@ public class LHeap extends Sort {
 		for (int i = 0; i < 2*d; ++i) {
 			System.out.printf("%d ", (int)a[i]);
 		}*/
+		
+		
+		buildHeap(a, 0, d);
+		// Put the small-heap (which is at the front of the array) into sorted order
+		for (int i = 0; i <= d; ++i) {
+			a[i] = delMin(a, i, d); 
+			
+			
+		}
+		//System.out.printf("done with first\n");
+		
+		for (int i = d; i < i + d + 6; ++i) {
+			System.out.printf("%d ", (int)a[i]);
+		}
+		
+		// Loop over each grouping of small heaps that we will create
+		for (int i =d + 2; i < a.length;) {
+			
+			int rightHeapBound = i + d >= a.length ? a.length - 1 : i + d;
+			buildHeap(a, i, rightHeapBound);
+			
+			for (int i1 = d; i1 < i1 + d; ++i1) {
+				System.out.printf("%d ", (int)a[i1]);
+			}
+			
+			for (int insertIndex = i; insertIndex <= rightHeapBound; ++insertIndex) {
+				a[insertIndex] = delMin(a, i, rightHeapBound);
+				
+				// Insertion sort this element to the left
+				int findingFinalPos = insertIndex;
+				while (findingFinalPos > insertIndex - d && Sort.less(a[findingFinalPos], a[findingFinalPos-1])) {
+					Sort.exch(a, findingFinalPos, findingFinalPos-1);
+					--findingFinalPos;
+				}
+			}
+		}
 	}
 	
 	
 	// Build the (relatively) small min-heap within the array that is to be sorted
 	public static void buildHeap(Comparable[] a, int left, int right) {
+		//System.out.printf("right - left: %d\n", right - left);
+		
 		/*for (int k = a.length / 2 - 1; k >= 0; --k) {
 			sink(a, k, a.length - 1);
 		}*/
