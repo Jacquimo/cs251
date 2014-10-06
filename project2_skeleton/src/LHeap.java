@@ -16,12 +16,12 @@ public class LHeap extends Sort {
 
 	/**
 	 * sort the array
-	 * @param a - array
-	 * @param d - locality
+	 * @param a - the array
+	 * @param d - the locality of the array
 	 */
 	public static void sort(Comparable[] a, int d) {
 		// Build small min-heap of size d+1 and then sort the small heap
-		buildHeap(a, 0, d);
+		buildMinHeap(a, 0, d);
 		for (int i = 0; i <= d; ++i) {
 			a[i] = delMin(a, i, d); 
 			
@@ -32,7 +32,7 @@ public class LHeap extends Sort {
 		for (int i =d + 1; i < a.length; i += d + 1) {
 			
 			int rightHeapBound = i + d >= a.length ? a.length - 1 : i + d;
-			buildHeap(a, i, rightHeapBound);
+			buildMinHeap(a, i, rightHeapBound);
 			
 			for (int insertIndex = i; insertIndex <= rightHeapBound; ++insertIndex) {
 				a[insertIndex] = delMin(a, i, rightHeapBound);
@@ -47,28 +47,52 @@ public class LHeap extends Sort {
 		}
 	}
 	
-	
-	// Build the (relatively) small min-heap within the array that is to be sorted
-	public static void buildHeap(Comparable[] a, int left, int right) {		
+	/**
+	 * Builds a min-heap of specified size in a specified array. Important to note that the heap is built
+	 * with the root on the RIGHT hand side of the specified bounds. This is so that when the minimum
+	 * element is deleted, it can be inserted at the left side of the bounds without having to shift
+	 * the min-heap, thereby allowing the sort to run completely in-place.
+	 * 
+	 * @param a - the array in which to build the min-heap
+	 * @param left - inclusive left bound to build min-heap
+	 * @param right - inclusive right bound to build min-heap
+	 */
+	public static void buildMinHeap(Comparable[] a, int left, int right) {		
 		// Do bottom-up heapify, runs in O(log n) time
 		for (int k = (right - left) / 2; k >= 0; --k) {
 			sink(a, k, left, right);
 		}
 	}
 	
-	// Create the heap with the root on the right hand side so that we can insert the min on the left-hand side
 	// The values of k are determined as if they start at the 0 index and are going left to right. Adjust the values
 	// of k and j when you actually need to access the elements inside the array
-	public static void sink(Comparable[] a, int k, int left, int right) {		
-		while(2*k < right - left) {		// Make sure THIS element isn't out of bounds
+	/**
+	 * Sinks the specified element down the heap until the heap size rules are fixed
+	 * 
+	 * @param a - the array that contains the min-heap
+	 * @param k - the index of the element to sink. Index is 0-based as if the root of the heap were 
+	 * 0 and as if the indices progressed in increasing order (instead of decreasing order like they physically do in the array)
+	 * @param left - left boundary of the heap
+	 * @param right - right boundary of the heap
+	 */
+	public static void sink(Comparable[] a, int k, int left, int right) {
+		// right - left is equal to the size of the heap
+		while(2*k < right - left) {
 			int j = 2*k+1;
-			if (j < right - left && less(a[right - (j+1)], a[right - j])) ++j; // Determine which child is smaller
+			if (j < right - left && less(a[right - (j+1)], a[right - j])) ++j; // Determine which child is smaller and set j to its index
 			if (a[right - k].compareTo(a[right - j]) <= 0) break;		// If the parent is smaller than child, you've found the right spot
-			Sort.exch(a, right - k, right - j);
+			Sort.exch(a, right - k, right - j);		// Otherwise, move the element down the tree
 			k = j;
 		}
 	}
 	
+	/**
+	 * Deletes the minimum element from the heap within the specified bounds
+	 * @param a - the array that contains the min-heap
+	 * @param left - the left hand bound of the min-heap
+	 * @param right - the right hand bound of the min-heap
+	 * @return the minimum element in the heap
+	 */
 	public static Comparable delMin(Comparable[] a, int left, int right) {
 		Comparable ret = a[right];
 		a[right] = a[left];
