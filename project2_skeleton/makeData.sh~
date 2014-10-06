@@ -1,0 +1,8 @@
+#!/bin/bash
+rm data.txt
+for alg in selection merge heap quick
+do
+
+printf $'$s\n' $alg >> data.txt
+
+done
