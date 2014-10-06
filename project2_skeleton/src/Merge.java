@@ -8,7 +8,7 @@
  * TODO this code is from the implementation given in the lecture slides
  * 
  * @author ghousto
- * @version 10/01/14
+ * @version 10/2/14
  * @pso   P06
  *
  */
@@ -28,7 +28,6 @@ public class Merge extends Sort {
 		//TestQSort.msort(a, new Comparable[a.length], 0, a.length - 1);
 		
 		Merge.mergesort(a, 0, a.length - 1);
-		//Sort.show(a);
 	}
 	
 	/**
@@ -63,42 +62,198 @@ public class Merge extends Sort {
 		merge(a, left, middle, right);
 	}
 	
-	//public static void merge(Comparable[] a, Comparable[] aux, int left, int mid, int right) {
-		/*for (int k = left; k <= right; ++k)
-			aux[k] = a[k];
-		
-		int i = left, j = mid+1;
-		for (int k = left; k <= right; ++k) {
-			if (i > mid) a[k] = aux[j++];
-			else if (j > right) a[k] = aux[i++];
-			else if (Sort.less(aux[j], aux[i])) a[k] = aux[j++];
-			else a[k] = aux[i++];
-		}*/
-		
-		/*int i = left, j = mid+1;
-		for (int k = left; k <= right; ++k) {
-			if (i > mid) aux[k] = a[j++];
-			else if (j > right) aux[k] = a[i++];
-			else if (Sort.less(a[j], a[i])) aux[k] = a[j++];
-			else aux[k] = a[i++];
-		}
-	}*/
-	
 	public static void merge(Comparable[] a, int left, int mid, int right) {
+		// The folowing code is an algorithm I created my self which I call "Relevant Range". The
+		// boundaries of the range are expanded until the value at the left boundary is the largest
+		// value on the left smaller than the smallest element in the right subarray and the value
+		// at the right boundary is the smallest number on the right greater than the largest element
+		// in the left subarray. The values wihtin the two boundaries are the only values that actually
+		// need to be be merged together, significantly reducing running time.
+		
 		int leftCounter = left, rightCounter = mid + 1;
 		int leftRelevantRange = mid , rightRelevantRange = mid+1;
 		
 		
-		while (leftRelevantRange > left && a[rightCounter].compareTo(a[leftRelevantRange]) <= 0) {
+		/*while (leftRelevantRange > left && a[rightCounter].compareTo(a[leftRelevantRange]) <= 0) {
 			--leftRelevantRange;
 		}
 	
 		while(rightRelevantRange < right && a[rightRelevantRange].compareTo(a[mid]) <= 0)
 			++rightRelevantRange;
 	
-		Merge.merge(a, leftRelevantRange, mid, rightRelevantRange, true);
+		merge(a, leftRelevantRange, mid, rightRelevantRange, true);*/
+		
+		
+		
+		
+		
+		/*while (((leftRelevantRange > left) && a[rightCounter].compareTo(a[leftRelevantRange]) <= 0) || 
+		((rightRelevantRange < right) && a[rightRelevantRange].compareTo(a[mid]) <= 0)) {
+		
+			if (a[rightCounter].compareTo(a[leftRelevantRange]) <= 0) {
+				//--leftRelevantRange;
+				leftRelevantRange -= (leftRelevantRange - left) / 4;
+			}
+			else {
+				++leftRelevantRange;
+			}
+			if (a[rightRelevantRange].compareTo(a[mid]) <= 0) {
+				//++rightRelevantRange;
+				rightRelevantRange += (right - rightRelevantRange) / 4;
+			}
+			else {
+				--rightRelevantRange;
+			}
+		}
+
+		merge(a, leftRelevantRange, mid, rightRelevantRange, true);*/
+
+
+
+
+
+
+
+		/*while (((leftRelevantRange > left) && a[rightCounter].compareTo(a[leftRelevantRange]) <= 0) || 
+		((rightRelevantRange < right) && a[rightRelevantRange].compareTo(a[mid]) <= 0)) {
+		
+			if (leftRelevantRange > left)
+				--leftRelevantRange;
+	
+			if (rightRelevantRange < right)
+				++rightRelevantRange;
+		}
+
+		merge(a, leftRelevantRange, mid, rightRelevantRange, true);*/
+
+
+
+
+
+
+		// The following merge implementation is a combination of the relevant range algorithm used
+		// above and the "standard" in-place merge. It is nearly as fast as the purley relevant range
+		// algorithm shown above, yet the extra comparisons (likely) slow it down.
+		
+		// It is useful for the worst-case scenario, so that if no relevant range can be found, the
+		// array will still get sorted in a similar amount of time as simply calling the in-placec sort
+
+		while (leftCounter <= mid && rightCounter <= right) {
+			// Expand the bounds of the relevant range
+			// Unless both of the boundaries have been found, expand both boundaries outwards
+			if (a[rightCounter].compareTo(a[leftRelevantRange]) <= 0 || a[rightRelevantRange].compareTo(a[mid]) <= 0) {
+				if (leftRelevantRange > left) --leftRelevantRange;
+				if (rightRelevantRange < right) ++rightRelevantRange;
+			}
+			else { // both boundaries have been found
+				break;
+			}
+	
+			// Perform normal calculations/adjustments for in-place merge
+			if (a[leftCounter].compareTo(a[rightCounter]) <= 0)
+				++leftCounter;
+			else { 
+				Comparable elementToMove = a[rightCounter];
+				// Shift over the elements starting at leftCounter (inclusive) ending at
+				// rightCounter (exclusive) by 1 index to the right
+				System.arraycopy(a, leftCounter, a, leftCounter+1, rightCounter-leftCounter);
+				a[leftCounter] = elementToMove;
+				++leftCounter; ++mid; ++rightCounter;
+			}
+		}
+		// At this point, check if the relevant range has been found, otherwise the arrays have been merged
+		//if (leftCounter <= mid && rightCounter <= right)
+		merge(a, leftRelevantRange, mid, rightRelevantRange, true);
+
+
+
+
+		/*boolean leftBoundFound  = false;
+		boolean rightBoundFound = false;
+
+		// works on the assumption that the relevant range will be found before the left subarray is traversed
+		while (leftCounter <= mid && rightCounter <= right) {
+			// Expand the bounds of the relevant range
+			// expand left bound
+			if (!leftBoundFound) {
+				if (a[rightCounter].compareTo(a[leftRelevantRange]) <= 0) {
+					if (leftRelevantRange == left)
+						leftBoundFound = true;
+					--leftRelevantRange;
+				}
+				else {
+					if (rightBoundFound) // the whole relevant range has been found
+						break;
+					else
+						leftBoundFound = true;
+				}
+			}
+			// expand right bound
+			if (!rightBoundFound) {
+				if (a[rightRelevantRange].compareTo(a[mid]) <= 0) {
+					if (rightRelevantRange == right)
+						rightBoundFound = true;
+					++rightRelevantRange;
+				}
+				else {
+					if (leftBoundFound)
+						break; // the whole relevant range has been found
+					else {
+						rightBoundFound = true;
+					}
+				}
+			}
+	
+			// Perform normal calculations/adjustments for in-place merge
+			if (a[leftCounter].compareTo(a[rightCounter]) <= 0)
+				++leftCounter;
+			else { 
+				Comparable elementToMove = a[rightCounter];
+				// Shift over the elements starting at leftCounter (inclusive) ending at
+				// rightCounter (exclusive) by 1 index to the right
+				System.arraycopy(a, leftCounter, a, leftCounter+1, rightCounter-leftCounter);
+				a[leftCounter] = elementToMove;
+				++leftCounter; ++mid; ++rightCounter;
+			}
+		}
+		// At this point, check if the relevant range has been found, otherwise the arrays have been merged
+		if (leftCounter <= mid && rightCounter <= right)
+			merge(a, leftRelevantRange, mid, rightRelevantRange, true);*/
+
+
+
+
+		/*while (leftCounter <= mid && rightCounter <= right) {
+			if (a[leftRelevantRange].compareTo(a[rightRelevantRange]) <= 0) {
+				Quick.mergeRelevantRange(a, leftRelevantRange, mid, rightRelevantRange, true);
+				return;
+			}
+			else {
+				--leftRelevantRange;
+				++rightRelevantRange;
+			}
+	
+			if (a[leftCounter].compareTo(a[rightCounter]) <= 0)
+				++leftCounter;
+			else { 
+				Comparable elementToMove = a[rightCounter];
+				// Shift over the elements starting at leftCounter (inclusive) ending at
+				// rightCounter (exclusive) by 1 index to the right
+				System.arraycopy(a, leftCounter, a, leftCounter+1, rightCounter-leftCounter);
+				a[leftCounter] = elementToMove;
+				++leftCounter; ++mid; ++rightCounter;
+			}
+		}*/
 	}
 	
+	/**
+	 * Merges two subarrays in place
+	 * @param a - the arry
+	 * @param left - left boundary of the left subarray
+	 * @param mid - midpoint, the (inclusive) right end of the left subarray
+	 * @param right - the right hand (inclusive) boundary of the right subarray
+	 * @param foundRelevantRange - flag used for method overloading
+	 */
 	public static void merge(Comparable[] a, int left, int mid, int right, boolean foundRelevantRange) {
 		if (a[mid].compareTo(a[mid+1]) <= 0) return;
 		int leftCounter = left, rightCounter = mid + 1, leftRelevantRange = mid - 1;
