@@ -1,17 +1,22 @@
 #!/bin/bash
-rm data.txt
-for alg in heap
+#rm data.txt
+for alg in quick
 do
+    printf -v dataFile $'%sdata.txt' $alg 
+    rm $dataFile
 
     for locality in 1 2
     do
 	if [ "$locality" = "1" ] ; then
-	    printf $'%s\n' $alg >> data.txt
+	    printf $'%s\n' $alg >> $dataFile
 	else
-	    printf $'L%s\n' $alg >> data.txt
+	    if [ "$alg" = "quick" ] ; then
+		break
+	    fi
+	    printf $'L%s\n' $alg >> $dataFile
 	fi
 
-	printf $'Size,Locality,First Run,Second Run,Third Run,Fourth Run,Fifth Run,Average Run Time\n' >> data.txt
+	printf $'Size,Locality,First Run,Second Run,Third Run,Fourth Run,Fifth Run,Average Run Time\n' >> $dataFile
 
 	for d in 5 15 25 35 45
 	do
@@ -23,20 +28,20 @@ do
 		printf -v data "data/10^6/L%ddata.txt" $d
 	    fi
 
-	    printf $'10^%d,%d,' $size $d  >> data.txt
+	    printf $'10^%d,%d,' $size $d  >> $dataFile
 
 	    for run in 1 2 3 4 5
 	    do
 		if [ "$locality" = "1" ] ; then
-		    java -cp .:src Sort -a $alg -f $data >> data.txt
+		    java -cp .:src Sort -a $alg -f $data >> $dataFile
 		else
-		    java -cp .:src Sort -a $alg -f $data -l $d >> data.txt
+		    java -cp .:src Sort -a $alg -f $data -l $d >> $dataFile
 		fi
-		printf , >> data.txt
+		printf , >> $dataFile
 	    done
-	    printf $'\n' >> data.txt
+	    printf $'\n' >> $dataFile
 
 	done
-	printf $'\n\n' >> data.txt
+	printf $'\n\n' >> $dataFile
     done
 done
