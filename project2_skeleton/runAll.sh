@@ -17,9 +17,9 @@ printf $d, >> runtimes.txt
 echo Selection run $r                                                 #
 java -cp .:src  Sort -a selection -f $data >> runtimes.txt               #
 #######################################################################
-#printf , >> runtimes.txt
-#echo LSelection run $r
-#java -cp bin Sort -a selection -f $data -l $d >> runtimes.txt
+printf , >> runtimes.txt
+echo LSelection run $r
+java -cp .:src  Sort -a selection -f $data -l $d >> runtimes.txt
 #printf , >> runtimes.txt
 #echo Merge run $r
 #java -cp bin Sort -a merge -f $data >> runtimes.txt
@@ -32,9 +32,9 @@ java -cp .:src  Sort -a selection -f $data >> runtimes.txt               #
 #printf , >> runtimes.txt
 #echo LHeap run $r
 #java -cp bin Sort -a heap -f $data -l $d >> runtimes.txt
-#printf $'\r\n' >> runtimes.txt
+#printf , >> runtimes.txt
 #echo Quick run $r
 #java -cp bin Sort -a quick -f $data >> runtimes.txt
-#printf , >> runtimes.txt
+printf $'\r\n' >> runtimes.txt
 done
 done

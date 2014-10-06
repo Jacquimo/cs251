@@ -4,7 +4,7 @@
  * Locality-Aware Heap Sort
  * 
  * @author ghousto
- * @version 10/3/14
+ * @version 10/5/14
  * @pso   P06
  *
  */
@@ -68,26 +68,26 @@ public class LHeap extends Sort {
 		}
 		//System.out.printf("done with first\n");
 		
-		for (int i = d; i < i + d + 6; ++i) {
+		/*for (int i = d; i < i + d + 6; ++i) {
 			System.out.printf("%d ", (int)a[i]);
-		}
+		}*/
 		
 		// Loop over each grouping of small heaps that we will create
-		for (int i =d + 2; i < a.length;) {
+		for (int i =d + 1; i < a.length; i += d + 1) {
 			
 			int rightHeapBound = i + d >= a.length ? a.length - 1 : i + d;
 			buildHeap(a, i, rightHeapBound);
 			
-			for (int i1 = d; i1 < i1 + d; ++i1) {
-				System.out.printf("%d ", (int)a[i1]);
-			}
+			/*for (int l = d; l < l + d; ++l) {
+				System.out.printf("%d ", (int)a[l]);
+			}*/
 			
 			for (int insertIndex = i; insertIndex <= rightHeapBound; ++insertIndex) {
 				a[insertIndex] = delMin(a, i, rightHeapBound);
 				
 				// Insertion sort this element to the left
 				int findingFinalPos = insertIndex;
-				while (findingFinalPos > insertIndex - d && Sort.less(a[findingFinalPos], a[findingFinalPos-1])) {
+				while (findingFinalPos > insertIndex - d - 1 && Sort.less(a[findingFinalPos], a[findingFinalPos-1])) {
 					Sort.exch(a, findingFinalPos, findingFinalPos-1);
 					--findingFinalPos;
 				}
