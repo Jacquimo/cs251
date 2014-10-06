@@ -3,7 +3,7 @@
 for alg in $1 $2 $3 $4
 do
 
-    if [ $alg -eq 0 ] ; then
+    if [[ -z "$alg"  ]] ; then
 	break
     fi
 
