@@ -1,4 +1,3 @@
-import java.util.Random;
 
 /**
  * General Quick Sort
@@ -23,79 +22,8 @@ public class Quick extends Sort {
 	 * @param a
 	 *            - array
 	 */
-	public static void sort(Comparable[] a) {
-		// quicksort(a, 0, a.length - 1);
-
-		/*int lengthOfDiv = a.length / ThreadQuick.MAX_THREADS;
-		ThreadQuick[] threads = new ThreadQuick[ThreadQuick.MAX_THREADS + 2];
-		for (int i = 0; i < ThreadQuick.MAX_THREADS; ++i) {
-			threads[i] =  new ThreadQuick(a, i * lengthOfDiv, (i + 1) * lengthOfDiv - 1, false);
-			threads[i].start();
-		}
-		
-		boolean finishedLeftHalf = false;
-		boolean finishedRightHalf = false;
-		int indexOfNewestThread = 4;
-		// Utilize fact that the max number of threads will be 4 unless changed elsewhere
-		// Combine the 4 spearately sorted sections into 2 half of the array
-		while (true) {
-			if (!finishedLeftHalf && !threads[0].isAlive() && !threads[1].isAlive()) {
-				threads[indexOfNewestThread] = new ThreadQuick(a, 0, lengthOfDiv * 2 - 1, false);
-				threads[indexOfNewestThread++].start();
-				finishedLeftHalf = true;
-				// If the value is > 5, then the other helper thread has been instantiated and we
-				// need to break out of the infinite loop
-				if (indexOfNewestThread > 5) break;
-			}
-			
-			if (!finishedRightHalf && !threads[2].isAlive() && !threads[3].isAlive()) {
-				threads[indexOfNewestThread] = new ThreadQuick(a, lengthOfDiv * 2, a.length - 1, false);
-				threads[indexOfNewestThread++].start();
-				finishedRightHalf = true;
-				// Use duplicate if statement (as above) on purpose instead of moving it out a level
-				// If the if statement were out a level, there would be significantly more comparisons
-				if (indexOfNewestThread > 5) break;
-			}
-		}
-		
-		//
-		do {
-			
-		} while (true);*/
-		
-		int lengthOfDiv = a.length / ThreadQuick.MAX_THREADS;
-		ThreadQuick[] threads = new ThreadQuick[ThreadQuick.MAX_THREADS + 2];
-		for (int i = 0; i < ThreadQuick.MAX_THREADS; ++i) {
-			System.out.printf("Number of active threads: %d\n", Thread.activeCount());
-			threads[i] =  new ThreadQuick(a, i * lengthOfDiv, (i + 1) * lengthOfDiv - 1, false);
-			threads[i].start();
-		}
-		
-		// Wait for the last thread to finish
-		try {
-			threads[3].join();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		threads[4] = new ThreadQuick(a, 0, lengthOfDiv*2 - 1, true); threads[4].start();
-		threads[5] = new ThreadQuick(a, lengthOfDiv*2, a.length-1, true); threads[5].start();
-		try {
-			threads[4].join();
-			threads[5].join();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		threads[0] = new ThreadQuick(a, 0, a.length - 1, true); threads[0].start();
-		
-		try {
-			threads[0].join();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public static void sort(Comparable[] a) {		
+		quicksort(a, 0, a.length - 1);
 		//Sort.show(a);
 	}
 
@@ -107,14 +35,13 @@ public class Quick extends Sort {
 		// Optimize code so that all small subarrays are sorted using insertion
 		// sort
 		if (right - left <= 16) {
-			Quick.insertionSort(a, left, right);
+			insertionSort(a, left, right);
 			return;
 		}
+		
+		// Pick the middle value as the pivot. This value is likely to be (somewhat) close to the median value
+		int pivot = partition(a, left + (right - left) / 2, left, right);
 
-		// Randomly generate the index of the pivot
-		Random generator = new Random();
-		int pivot = generator.nextInt(right - left + 1) + left;
-		pivot = Quick.partition(a, pivot, left, right);
 
 		int lengthLeft = pivot - left;
 		int lengthRight = right - pivot;
@@ -123,55 +50,25 @@ public class Quick extends Sort {
 		if (lengthLeft < lengthRight) {
 			Quick.quicksort(a, left, pivot - 1);
 			Quick.quicksort(a, pivot + 1, right);
-
-			/*
-			 * if (ThreadQuick.num_threads < ThreadQuick.MAX_THREADS * 2) new
-			 * ThreadQuick(a, left, pivot-1).start(); else quicksort(a, left,
-			 * pivot-1);
-			 * 
-			 * if (ThreadQuick.num_threads < ThreadQuick.MAX_THREADS * 2) new
-			 * ThreadQuick(a, pivot+1, right).start(); else quicksort(a,
-			 * pivot+1, right);
-			 */
 		} else {
 			Quick.quicksort(a, pivot + 1, right);
 			Quick.quicksort(a, left, pivot - 1);
-
-			/*
-			 * if (ThreadQuick.num_threads < ThreadQuick.MAX_THREADS * 2) new
-			 * ThreadQuick(a, pivot+1, right).start(); else quicksort(a,
-			 * pivot+1, right);
-			 * 
-			 * if (ThreadQuick.num_threads < ThreadQuick.MAX_THREADS * 2) new
-			 * ThreadQuick(a, left, pivot-1).start(); else quicksort(a, left,
-			 * pivot-1);
-			 */
 		}
 	}
 
+	
 	/**
-	 * Partition a region of the array based upon the value of a given pivot
-	 * index
+	 * Partition a region of the array based upon the value of a given pivot index
 	 * 
-	 * @param a
-	 *            - the array
-	 * @param pivot
-	 *            - the index of the pivot
-	 * @param left
-	 *            - starting index of region of array to be partitioned
-	 * @param right
-	 *            - ending index of region of array to be partitioned
+	 * @param a - the array
+	 * @param pivot - the index of the pivot
+	 * @param left - starting index of region of array to be partitioned
+	 * @param right - ending index of region of array to be partitioned
 	 * @return the final position of the pivot
 	 */
 	public static int partition(Comparable[] a, int pivot, int left, int right) {
 		Sort.exch(a, pivot, right);
 		pivot = right;
-
-		/*
-		 * int storeIndex = left; for (int i = left; i < right; ++i) { if
-		 * (Sort.less(a[i], a[pivot])) { Sort.exch(a, i, storeIndex);
-		 * ++storeIndex; } } Sort.exch(a, storeIndex, right); return storeIndex;
-		 */
 
 		int i = left, j = right - 1;
 
@@ -197,14 +94,34 @@ public class Quick extends Sort {
 			return pivot;
 		Sort.exch(a, i, pivot);
 		return i;
+	}
+	
+	// Currently, this partitiioning method doesn't work yet. There appears to be an infinite loop somewhere
+	public static int partition(Comparable[] a, Comparable pivot, int left, int right) {
+		int i = left, j = right;
 
-		/*
-		 * if (Sort.less(a[pivot], a[i])) { Sort.exch(a, i, pivot); return i; }
-		 * else if (Sort.less(a[pivot], a[j])) { Sort.exch(a, j, pivot); return
-		 * j; } else return pivot;
-		 */
+		while (true) {
+			// Find index i such that a[i] > a[pivot]
+			// while (i < pivot && Sort.less(a[i], a[pivot]))
+			while (i < right && a[i].compareTo(pivot) < 0)
+				++i;
 
-		// return i;
+			// Find index j such that a[j] < a[pivot]
+			// while (j > left && Sort.less(a[pivot], a[j]))
+			while (j > left && pivot.compareTo(a[j]) < 0)
+				--j;
+
+			if (i < j)
+				Sort.exch(a, i, j);
+			else
+				break;
+		}
+		// Need to make sure that i is the correct index to swap the pivot back
+		// into
+		//if (i == right)
+			//return right;
+		//Sort.exch(a, i, pivot);
+		return i;
 	}
 
 	public static void insertionSort(Comparable[] a, int left, int right) {
@@ -216,6 +133,58 @@ public class Quick extends Sort {
 			}
 		}
 	}
+	
+	// Use the Dual-Pivot Quicksort that uses 2 pivots instead of the classical 1
+	public static void qsort2pivot(Comparable[] a, int left, int right) {
+		if (left >= right)
+			return;
+		
+		if (right - left < 17) {
+			insertionSort(a, left, right);
+			return;
+		}
+		
+		// Pick the 2 pivots so that they are about 1/3 and 2/3 of the way through the array
+		int p1 = (right - left) / 3;
+		int p2 = 2 * p1;
+		
+		// 1st pivot must be less than the 2nd pivot
+		if (a[p2].compareTo(p1) < 0) {
+			Sort.exch(a, p1, p2);
+			int temp = p2;
+			p2 = p1;
+			p1 = temp;
+		}
+		
+		// Move the pivots outside the searching area
+		Sort.exch(a, left, p1);
+		p1 = left;
+		Sort.exch(a, p2, right);
+		p2 = right;
+		
+		int less = left + 1;
+		int mid = left + 1;
+		int greater = right - 1;
+		
+		for (int i = mid; i < p2; ++i) {
+			Comparable temp = a[i];
+			if (a[i].compareTo(a[p1]) < 0) { // Division where element is less than pivot 1
+				System.arraycopy(a, less, a, less+1, i - less);
+				a[less] = temp;
+				++less; ++mid;
+			}
+			else if (a[i].compareTo(a[p2]) < 0) {
+				System.arraycopy(a, mid, a, mid+1, i - mid);
+				a[mid] = temp;
+				++mid;
+			}
+			else {
+				
+			}
+		}
+		
+	}
+	
 	
 	/**
 	 * executes an in-place merge just like a merge in Mergesort
@@ -272,7 +241,7 @@ public class Quick extends Sort {
 	}
 }
 
-class ThreadQuick extends Thread {
+/*class ThreadQuick extends Thread {
 	final static int MAX_THREADS = Runtime.getRuntime().availableProcessors();
 	// static final ExecutorService executor =
 	// Executors.newFixedThreadPool(MAX_THREADS);
@@ -284,10 +253,10 @@ class ThreadQuick extends Thread {
 	private boolean merge;
 
 	public ThreadQuick(Comparable[] a, int l, int r, boolean m) {
-		/*
-		 * synchronized((Integer) MAX_THREADS) { MAX_THREADS =
-		 * Runtime.getRuntime().availableProcessors(); }
-		 */
+		
+		 //synchronized((Integer) MAX_THREADS) { MAX_THREADS =
+		 //Runtime.getRuntime().availableProcessors(); }
+		 
 
 		array = a;
 		left = l;
@@ -311,4 +280,4 @@ class ThreadQuick extends Thread {
 	public void start() {
 		super.run();
 	}
-}
+}*/
