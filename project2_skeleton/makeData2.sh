@@ -1,6 +1,6 @@
 #!/bin/bash
 #rm data.txt
-for alg in selection merge
+for alg in heap quick
 do
     printf -v dataFile $'%sdata.txt' $alg 
     rm $dataFile
