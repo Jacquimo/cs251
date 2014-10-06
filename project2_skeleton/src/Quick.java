@@ -23,10 +23,10 @@ public class Quick extends Sort {
 	 *            - array
 	 */
 	public static void sort(Comparable[] a) {		
-		//quicksort(a, 0, a.length - 1);
+		quicksort(a, 0, a.length - 1);
 		//Sort.show(a);
-		qsort2pivot(a, 0, a.length - 1);
-		Sort.show(a);
+		//qsort2pivot(a, 0, a.length - 1);
+		//Sort.show(a);
 	}
 
 	public static void quicksort(Comparable[] a, int left, int right) {
