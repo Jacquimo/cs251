@@ -59,7 +59,7 @@ public class Merge extends Sort {
 		// Calling Mergesort without having to use an auxiliary array
 		Merge.mergesort(a, left, middle);
 		Merge.mergesort(a, middle+1, right);
-		merge(a, left, middle, right);
+		merge(a, left, middle, right, true);
 	}
 	
 	public static void merge(Comparable[] a, int left, int mid, int right) {

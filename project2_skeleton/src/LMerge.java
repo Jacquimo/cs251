@@ -45,7 +45,7 @@ public class LMerge extends Sort {
 		int middle = (left + right) / 2;
 		mergesort(a, left, middle, d);
 		mergesort(a, middle+1, right, d);
-		merge(a, middle - d >= left ? middle - d : left, middle, middle + d <= right ? middle + d : right);
+		merge(a, middle - d >= left ? middle - d : left, middle, middle + d <= right ? middle + d : right, true);
 		
 	}
 	
@@ -61,14 +61,14 @@ public class LMerge extends Sort {
 		int leftRelevantRange = mid , rightRelevantRange = mid+1;
 		
 		
-		/*while (leftRelevantRange > left && a[rightCounter].compareTo(a[leftRelevantRange]) <= 0) {
+		while (leftRelevantRange > left && a[rightCounter].compareTo(a[leftRelevantRange]) <= 0) {
 			--leftRelevantRange;
 		}
 	
 		while(rightRelevantRange < right && a[rightRelevantRange].compareTo(a[mid]) <= 0)
 			++rightRelevantRange;
 	
-		merge(a, leftRelevantRange, mid, rightRelevantRange, true);*/
+		merge(a, leftRelevantRange, mid, rightRelevantRange, true);
 		
 		
 		
@@ -79,7 +79,7 @@ public class LMerge extends Sort {
 		// It is useful for the worst-case scenario, so that if no relevant range can be found, the
 		// array will still get sorted in a similar amount of time as simply calling the in-placec sort
 
-		while (leftCounter <= mid && rightCounter <= right) {
+		/*while (leftCounter <= mid && rightCounter <= right) {
 			// Expand the bounds of the relevant range
 			// Unless both of the boundaries have been found, expand both boundaries outwards
 			if (a[rightCounter].compareTo(a[leftRelevantRange]) <= 0 || a[rightRelevantRange].compareTo(a[mid]) <= 0) {
@@ -104,7 +104,7 @@ public class LMerge extends Sort {
 		}
 		// At this point, check if the relevant range has been found, otherwise the arrays have been merged
 		//if (leftCounter <= mid && rightCounter <= right)
-		merge(a, leftRelevantRange, mid, rightRelevantRange, true);
+		merge(a, leftRelevantRange, mid, rightRelevantRange, true);*/
 	}
 	
 	/**
