@@ -1,7 +1,12 @@
 #!/bin/bash
 #rm data.txt
-for alg in selection merge
+for alg in $1 $2 $3 $4
 do
+
+    if [ $alg -eq 0 ] ; then
+	break
+    fi
+
     printf -v dataFile $'%sdata.txt' $alg 
     rm $dataFile
 
