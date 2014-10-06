@@ -20,67 +20,19 @@ public class LHeap extends Sort {
 	 * @param d - locality
 	 */
 	public static void sort(Comparable[] a, int d) {
-		//d = a.length-1;
-		/*Comparable[] extra = new Comparable[d+1];
-		int index = a.length-1;
-		for (int i = d; i >= 0; --i){ // copy over the first d+1 elements, keeping track of where to get the next element
-			extra[i] = a[index--];
-		}
-		
-		buildHeap(extra);
-		
-		for (int i = a.length - 1; i >= 0; --i) {
-			if (index >= 0) { // if we still are adding values to the heap
-				a[i] = delMax(extra, d);
-				insert(extra, a[index--]);
-			}
-			else
-				a[i] = delMax(extra, i);
-		}*/
-		
-		/*for (int i = 0; i < 2*d; ++i) {
-			System.out.printf("%d ", (int)a[i]);
-		}
-		System.out.printf("\nThe initial distribution of the array start\n");
-		
+		// Build small min-heap of size d+1 and then sort the small heap
 		buildHeap(a, 0, d);
-		
-		for (int i = 0; i < 2*d; ++i) {
-			System.out.printf("%d ", (int)a[i]);
-		}
-		System.out.printf("\nAfter the first small heap is made\n");
-		
-		for (int i = 0; i <= d; ++i) {
-			a[i] = delMin(a, i, d); 
-		}
-		
-		for (int i = 0; i < 2*d; ++i) {
-			System.out.printf("%d ", (int)a[i]);
-		}*/
-		
-		
-		buildHeap(a, 0, d);
-		// Put the small-heap (which is at the front of the array) into sorted order
 		for (int i = 0; i <= d; ++i) {
 			a[i] = delMin(a, i, d); 
 			
 			
 		}
-		//System.out.printf("done with first\n");
-		
-		/*for (int i = d; i < i + d + 6; ++i) {
-			System.out.printf("%d ", (int)a[i]);
-		}*/
 		
 		// Loop over each grouping of small heaps that we will create
 		for (int i =d + 1; i < a.length; i += d + 1) {
 			
 			int rightHeapBound = i + d >= a.length ? a.length - 1 : i + d;
 			buildHeap(a, i, rightHeapBound);
-			
-			/*for (int l = d; l < l + d; ++l) {
-				System.out.printf("%d ", (int)a[l]);
-			}*/
 			
 			for (int insertIndex = i; insertIndex <= rightHeapBound; ++insertIndex) {
 				a[insertIndex] = delMin(a, i, rightHeapBound);
@@ -97,13 +49,7 @@ public class LHeap extends Sort {
 	
 	
 	// Build the (relatively) small min-heap within the array that is to be sorted
-	public static void buildHeap(Comparable[] a, int left, int right) {
-		//System.out.printf("right - left: %d\n", right - left);
-		
-		/*for (int k = a.length / 2 - 1; k >= 0; --k) {
-			sink(a, k, a.length - 1);
-		}*/
-		
+	public static void buildHeap(Comparable[] a, int left, int right) {		
 		// Do bottom-up heapify, runs in O(log n) time
 		for (int k = (right - left) / 2; k >= 0; --k) {
 			sink(a, k, left, right);
@@ -114,7 +60,6 @@ public class LHeap extends Sort {
 	// The values of k are determined as if they start at the 0 index and are going left to right. Adjust the values
 	// of k and j when you actually need to access the elements inside the array
 	public static void sink(Comparable[] a, int k, int left, int right) {		
-		//int k = 0;
 		while(2*k < right - left) {		// Make sure THIS element isn't out of bounds
 			int j = 2*k+1;
 			if (j < right - left && less(a[right - (j+1)], a[right - j])) ++j; // Determine which child is smaller
