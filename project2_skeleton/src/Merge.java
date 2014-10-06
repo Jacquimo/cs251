@@ -255,16 +255,20 @@ public class Merge extends Sort {
 	 * @param foundRelevantRange - flag used for method overloading
 	 */
 	public static void merge(Comparable[] a, int left, int mid, int right, boolean foundRelevantRange) {
+		// Check case for where the subarrays are already sorted
 		if (a[mid].compareTo(a[mid+1]) <= 0) return;
 		int leftCounter = left, rightCounter = mid + 1, leftRelevantRange = mid - 1;
 		
+		// Loop over the left subarray looking places where elements in the right subarray should be inserted
 		while (leftCounter <= mid && rightCounter <= right) {
 			if (a[leftCounter].compareTo(a[rightCounter]) <= 0)
 				++leftCounter;
-			else { 
+			else { // If the element in the right subarray is smaller than this element in the left subarray
 				Comparable elementToMove = a[rightCounter];
+				// Shift over the relevant elements by 1 place
 				System.arraycopy(a, leftCounter, a, leftCounter+1, rightCounter-leftCounter);
 				a[leftCounter] = elementToMove;
+				// Update counter variables so that we know where the boundaries of the subarrays are now
 				++leftCounter; ++mid; ++rightCounter;
 			}
 		}
