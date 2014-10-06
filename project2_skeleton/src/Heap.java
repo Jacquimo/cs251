@@ -19,20 +19,10 @@ public class Heap extends Sort {
 	 * @param a - array
 	 */
 	public static void sort(Comparable[] a) {
-		/*Comparable[] extra = Arrays.copyOf(a, a.length);
-		buildHeap(extra);
-		StdOut.printf("Was \"a\" made into a heap? %s\n", isHeap(extra, 0, extra.length-1));
-		for (int i = extra.length - 1; i >= 0; --i) {
-			a[i] = delMax(extra, i);
-		}*/
-		
 		buildMaxHeap(a);
-		//StdOut.printf("Was \"a\" made into a heap? %s\n", isHeap(a, 0, a.length-1));
 		for (int i = a.length - 1; i >= 0; --i) {
 			a[i] = delMax(a, i);
 		}
-		
-		//Sort.show(a);
 	}
 	
 	/**
@@ -134,21 +124,4 @@ public class Heap extends Sort {
 			}
 		}*/
 	}
-	
-	/*public static boolean canHaveChildren(Comparable[] a, int k) {
-		return 2*k+1 < a.length;
-	}
-	
-	public static Comparable maxComp(Comparable a, Comparable b) {
-		if (a == null)
-			return b;
-		if (b == null)
-			return a;
-		
-		int comp = a.compareTo(b);
-		if (comp < 0)
-			return b;
-		else
-			return a;
-	}*/
 }
