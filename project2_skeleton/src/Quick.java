@@ -23,8 +23,10 @@ public class Quick extends Sort {
 	 *            - array
 	 */
 	public static void sort(Comparable[] a) {		
-		quicksort(a, 0, a.length - 1);
+		//quicksort(a, 0, a.length - 1);
 		//Sort.show(a);
+		qsort2pivot(a, 0, a.length - 1);
+		Sort.show(a);
 	}
 
 	public static void quicksort(Comparable[] a, int left, int right) {
@@ -139,10 +141,10 @@ public class Quick extends Sort {
 		if (left >= right)
 			return;
 		
-		if (right - left < 17) {
+		/*if (right - left < 17) {
 			insertionSort(a, left, right);
 			return;
-		}
+		}*/
 		
 		// Pick the 2 pivots so that they are about 1/3 and 2/3 of the way through the array
 		int p1 = (right - left) / 3;
@@ -166,7 +168,7 @@ public class Quick extends Sort {
 		int mid = left + 1;
 		int greater = right - 1;
 		
-		for (int i = mid; i < p2; ++i) {
+		for (int i = mid; i < greater; ++i) {
 			Comparable temp = a[i];
 			if (a[i].compareTo(a[p1]) < 0) { // Division where element is less than pivot 1
 				System.arraycopy(a, less, a, less+1, i - less);
@@ -179,9 +181,18 @@ public class Quick extends Sort {
 				++mid;
 			}
 			else {
-				
+				System.arraycopy(a, i+1, a, i, greater - i);
+				a[greater] = temp;
+				--greater;
 			}
 		}
+		
+		Sort.exch(a, p1, less);
+		Sort.exch(a, p2, greater);
+		
+		qsort2pivot(a, left, less - 1);
+		qsort2pivot(a, less + 1, greater -1);
+		qsort2pivot(a, greater + 1, right);
 		
 	}
 	

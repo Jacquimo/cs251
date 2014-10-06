@@ -2,22 +2,25 @@ import java.util.Random;
 
 public class TestQSort {
 	public static boolean aIsA = true;
-	public static boolean dontPrint = false;
+	public static boolean dontPrint = true;
 	
 	public static void main(String[] args) {
 		Comparable[] a = new Comparable[20];
 		Random g = new Random();
 		for (int i = 0; i < a.length; ++i)
-			a[i] = g.nextInt(20) + 1;
+			a[i] = g.nextInt(15) + 1;
 		
-		printArray(a, -1, 0, a.length - 1);
+		//printArray(a, -1, 0, a.length - 1);
+		Quick.qsort2pivot(a, 0, a.length - 1);
 		/*Quick.sort(a);
 		System.out.printf("The final array after calling quicksort is:\n");
 		printArray(a, -1, 0, a.length - 1);*/
 		
-		printArray(a, null, 0, a.length-1);
-		aIsA = false;
-		LMerge.sort(a, a.length-1);
+		System.out.printf("\n");
+		
+		printArray(a, -1, 0, a.length-1);
+		//aIsA = false;
+		//LMerge.sort(a, a.length-1);
 		//printArray(a, null, 0, a.length-1);
 		System.out.printf("%s\n", Sort.isSorted(a) ? "Sorted" : "Sort Failed");
 	}
