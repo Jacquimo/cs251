@@ -1,6 +1,7 @@
 /**
  * General Heap Sort
  * 
+ * Some of the implementation is based off of the ideas in the lecture slides
  * 
  * @author ghousto
  * @version 10/2/14
@@ -14,7 +15,7 @@ public class Heap extends Sort {
 	private Heap() {}
 
 	/**
-	 * sort the array
+	 * sort a specified array using heapsort
 	 * @param a - array
 	 */
 	public static void sort(Comparable[] a) {
@@ -34,7 +35,14 @@ public class Heap extends Sort {
 		//Sort.show(a);
 	}
 	
-	
+	/**
+	 * Tests if the specified array is a valid max heap with a specified root index.
+	 * This method may not work as intended. Hasn't been tested with new (i.e. in-place) implementation
+	 * @param a - the array
+	 * @param k - the root index
+	 * @param maxIndex - the maximum index to check (so that you don't check outside of the heap)
+	 * @return
+	 */
 	public static boolean isHeap(Comparable[] a, int k, int maxIndex) {		
 		if (2*k >= maxIndex)
 			return true;
@@ -49,12 +57,22 @@ public class Heap extends Sort {
 			return false;
 	}
 	
+	/**
+	 * Build a max-heap out of a specified array
+	 * @param a - the array to heapify
+	 */
 	public static void buildMaxHeap(Comparable[] a) {
 		for (int k = a.length / 2 - 1; k >= 0; --k) {
 			sink(a, k, a.length - 1);
 		}
 	}
 	
+	/**
+	 * Deletes the maximum element (root) from the heap and then corrects the heap
+	 * @param a - the array in which the heap is represented
+	 * @param lastIndex - the index of the last element in the heap
+	 * @return the maximum element in the heap
+	 */
 	public static Comparable delMax(Comparable[] a, int lastIndex) {
 		Comparable ret = a[0];
 		a[0] = a[lastIndex];
@@ -64,11 +82,13 @@ public class Heap extends Sort {
 		return ret;
 	}
 	
-	// a pre-condition for this method is that it will never be called on a leaf. Otherwise, there will likely be an exception
-	public static void sink(Comparable[] a, int k, int maxIndex) {
-		/*if (a[k] == null || 2*k+1 >= maxIndex)
-			return;*/
-		
+	/**
+	 * Sink the element at the specified index until it logically conforms to the rules of the heap (e.g. value is less than parent value)
+	 * @param a - the array
+	 * @param k - the index of the element to sink
+	 * @param maxIndex - the maximum index to check (so that you don't check outside of the heap)
+	 */
+	public static void sink(Comparable[] a, int k, int maxIndex) {		
 		while(2*k < maxIndex) {
 			int j = 2*k+1;
 			if (j < maxIndex && less(a[j], a[j+1])) ++j;
