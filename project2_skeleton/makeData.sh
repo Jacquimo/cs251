@@ -7,8 +7,8 @@ do
 	break
     fi
 
-    #printf -v dataFile $'%sdata.txt' $alg 
-    dataFile="data.txt"
+    printf -v dataFile $'%sdata.txt' $alg 
+    #dataFile="data.txt"
     rm $dataFile
 
     #printf $'L%s\n' $alg >> $dataFile
