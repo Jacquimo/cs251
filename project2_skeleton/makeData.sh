@@ -7,34 +7,35 @@ do
 	break
     fi
 
-    printf -v dataFile $'%sdata.txt' $alg 
+    #printf -v dataFile $'%sdata.txt' $alg 
+    dataFile="data.txt"
     rm $dataFile
 
-    printf $'L%s\n' $alg >> $dataFile
-    printf $'Size,Locality,First Run,Second Run,Third Run,Fourth Run,Fifth Run,Average Run Time' >> $dataFile
+    #printf $'L%s\n' $alg >> $dataFile
+    #printf $'Size,Locality,First Run,Second Run,Third Run,Fourth Run,Fifth Run,Average Run Time\n' >> $dataFile
 
-    for size in 3 5 6
-    do
+    #for size in 3 5 6
+    #do
 
-	#for locality in 2
-	#do
-	    #if [ "$locality" = "1" ] ; then
-		#printf $'%s\n' $alg >> $dataFile
-	    #else
-		#if [ "$alg" = "quick" ] ; then
-		    #break
-		#fi
-		#printf $'L%s\n' $alg >> $dataFile
-	    #fi
+	for locality in 1 2
+	do
+	    if [ "$locality" = "1" ] ; then
+		printf $'%s\n' $alg >> $dataFile
+	    else
+		if [ "$alg" = "quick" ] ; then
+		    break
+		fi
+		printf $'L%s\n' $alg >> $dataFile
+	    fi
 	    
-	    #printf $'Size,Locality,First Run,Second Run,Third Run,Fourth Run,Fifth Run,Average Run Time\n' >> $dataFile
+	    printf $'Size,Locality,First Run,Second Run,Third Run,Fourth Run,Fifth Run,Average Run Time\n' >> $dataFile
 	    
 	    for d in 5 15 25 35 45
 	    do
-		#size=6
+		size=6
 		if [ "$alg" = "selection" ] ; then
 		    printf -v data "data/10^%d/L%ddata.txt" $size  $d
-		    #size=5
+		    size=5
 		else
 		    printf -v data "data/10^%d/L%ddata.txt" $size  $d
 		fi
@@ -43,19 +44,19 @@ do
 		
 		for run in 1 2 3 4 5
 		do
-		    #if [ "$locality" = "1" ] ; then
-			#java -cp .:src Sort -a $alg -f $data >> $dataFile
-		    #else
+		    if [ "$locality" = "1" ] ; then
+			java -cp .:src Sort -a $alg -f $data >> $dataFile
+		    else
 			java -cp .:src Sort -a $alg -f $data -l $d >> $dataFile
-		    #fi
+		    fi
 		    printf , >> $dataFile
 		done
 		printf $'\n' >> $dataFile
 		
 	    done
-	    #printf $'\n' >> $dataFile
-	#done
-	printf $'\n' >> $dataFile
-    done
-    printf $'\n\n' >> $dataFile
+	    printf $'\n' >> $dataFile
+	done
+	printf $'\n\n' >> $dataFile
+    #done
+    #printf $'\n\n' >> $dataFile
 done
