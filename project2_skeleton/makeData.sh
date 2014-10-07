@@ -34,8 +34,9 @@ do
 	    do
 		size=6
 		if [ "$alg" = "selection" ] ; then
-		    printf -v data "data/10^%d/L%ddata.txt" $size  $d
 		    size=5
+		    #printf $'%d\n' $size
+		    printf -v data "data/10^%d/L%ddata.txt" $size  $d
 		else
 		    printf -v data "data/10^%d/L%ddata.txt" $size  $d
 		fi
