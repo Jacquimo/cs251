@@ -17,7 +17,7 @@ do
     #for size in 3 5 6
     #do
 
-	for locality in 1 2
+	for locality in 2
 	do
 	    if [ "$locality" = "1" ] ; then
 		printf $'%s\n' $alg >> $dataFile
