@@ -19,7 +19,6 @@ public class Solver {
 		for (int i = 0; i < num.length; ++i)
 			numbers.add(num[i]);
 				
-		//return solve(numbers, sol, operations, targetAnswer, 0, numbers.size() - 2);
 		for (int i = 0; i < numbers.size(); ++i) {
 			int value = numbers.remove(i);
 			sol[4] = value;
@@ -40,13 +39,10 @@ public class Solver {
 		if (num.size() <= 0)
 			return targetAnswer == prevSum;
 		
-		//int valToUse = num.remove(indexNumToUseInComp);
 		for (int i = 0; i < num.size(); ++i) {
 			int nextNum = num.remove(i);
 			sol[opsIndex] = nextNum;
-			//ArrayList<Integer> otherNums = (ArrayList<Integer>) num.clone();
 			
-			// First check to see if the solution works using addition
 			ops[opsIndex] = '+';
 			if (solve(num, sol, ops, targetAnswer, nextNum + prevSum, opsIndex - 1)) // Recursively check if this configuration is valid	
 				return true;
