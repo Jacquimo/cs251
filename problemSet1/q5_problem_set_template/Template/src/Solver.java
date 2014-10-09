@@ -23,15 +23,15 @@ public class Solver {
 				
 		//return solve(num, sol, operations, targetAnswer, 4, 0);
 		//return false;
-		int firstVal = numbers.remove(0);
-		return solve(numbers, sol, operations, targetAnswer, firstVal, numbers.size());
+		//int firstVal = numbers.remove(0);
+		return solve(numbers, sol, operations, targetAnswer, 0, numbers.size() - 2);
     }
 	
 	public boolean solve(ArrayList<Integer> num, int sol[], char ops[], int targetAnswer, int prevSum,  int opsIndex) throws Exception {		
-		if (targetAnswer > prevSum)
+		if (prevSum > targetAnswer)
 			return false;
 		
-		if (targetAnswer == prevSum)
+		if (prevSum == targetAnswer)
 			return num.size() <= 0;
 		
 		if (num.size() <= 0)
