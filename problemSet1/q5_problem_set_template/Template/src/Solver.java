@@ -1,6 +1,4 @@
-import java.awt.List;
-import java.lang.reflect.Array;
-import java.util.*;
+import java.util.ArrayList;
 
 /* TODO: Implement the solver here 
  * @author:
@@ -21,10 +19,15 @@ public class Solver {
 		for (int i = 0; i < num.length; ++i)
 			numbers.add(num[i]);
 				
-		//return solve(num, sol, operations, targetAnswer, 4, 0);
-		//return false;
-		//int firstVal = numbers.remove(0);
-		return solve(numbers, sol, operations, targetAnswer, 0, numbers.size() - 2);
+		//return solve(numbers, sol, operations, targetAnswer, 0, numbers.size() - 2);
+		for (int i = 0; i < numbers.size(); ++i) {
+			int value = numbers.remove(i);
+			sol[4] = value;
+			if (solve(numbers, sol, operations, targetAnswer, value, 3))
+				return true;
+			numbers.add(i, value);
+		}
+		return false;
     }
 	
 	public boolean solve(ArrayList<Integer> num, int sol[], char ops[], int targetAnswer, int prevSum,  int opsIndex) throws Exception {		
@@ -40,7 +43,7 @@ public class Solver {
 		//int valToUse = num.remove(indexNumToUseInComp);
 		for (int i = 0; i < num.size(); ++i) {
 			int nextNum = num.remove(i);
-			sol[opsIndex + 1] = nextNum;
+			sol[opsIndex] = nextNum;
 			//ArrayList<Integer> otherNums = (ArrayList<Integer>) num.clone();
 			
 			// First check to see if the solution works using addition
