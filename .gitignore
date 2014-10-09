@@ -1,5 +1,7 @@
 .metadata
 */__MACOSX
+*/*/__MACOSX
+*/*/*/__MACOSX
 *.class
 .~lock*
 ~*.*
