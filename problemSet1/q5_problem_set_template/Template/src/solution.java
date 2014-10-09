@@ -5,7 +5,7 @@
 import java.util.*;
 public class solution {
     
-    public static void main(String args[]){
+    public static void main(String args[]) throws Exception{
         
         int input[] = new int[5];
         
