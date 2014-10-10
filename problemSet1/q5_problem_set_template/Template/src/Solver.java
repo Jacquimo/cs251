@@ -30,11 +30,11 @@ public class Solver {
     }
 	
 	public boolean solve(ArrayList<Integer> num, int sol[], char ops[], int targetAnswer, int prevSum,  int opsIndex) throws Exception {		
-		if (prevSum > targetAnswer)
-			return false;
+		/*if (prevSum > targetAnswer)
+			return false;*/
 		
-		if (prevSum == targetAnswer)
-			return num.size() <= 0;
+		/*if (prevSum == targetAnswer)
+			return num.size() <= 0;*/
 		
 		if (num.size() <= 0)
 			return targetAnswer == prevSum;
