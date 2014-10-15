@@ -460,10 +460,12 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 
     public Iterable<Key> kSmallest(int k){
         /* TODO: Implement kSmallest here... */
+    	return null;
     }
 
     public Iterable<Key> kLargest(int k){
         /* TODO: Implement kLargest here... */
+    	return null;
     }
     
 	/*************************************************************************

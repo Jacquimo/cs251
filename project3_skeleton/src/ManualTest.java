@@ -1,4 +1,5 @@
-import java.util.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 public class ManualTest{
     /*
@@ -12,8 +13,10 @@ public class ManualTest{
     
     /***********************************************************************
      *  Unit test client.
+     * @throws FileNotFoundException 
      ***********************************************************************/
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
+    	System.setIn(new FileInputStream("SampleInput.txt"));
         String[] a = StdIn.readAllStrings();
         if (args.length < 2){
             System.out.format("Usage: -Datastructure Datasize [hashtablesize] \n-H: Hash Table -T: Balanced Search Tree\nExample:java test -T 10000\nExample: java Test -H 10000 20000\n");
