@@ -455,7 +455,7 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 
 	// number keys between lo and hi
 	public int rangeCount(Key lo, Key hi) {
-        /* TODO: Implement rangeCount here... */
+        return rank(hi) - rank(lo);
 	}
 
     public Iterable<Key> kSmallest(int k){
