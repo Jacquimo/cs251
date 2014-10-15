@@ -1,13 +1,13 @@
 /*************************************************************************
- * Template Copyright © 2002–2010, Robert Sedgewick and Kevin Wayne.
+ * Template Copyright 2002/2010, Robert Sedgewick and Kevin Wayne.
  * We are using Red Black BST provided by Princeton
  *
- * @ author:
+ * @ author: ghousto
  *
  *
  *************************************************************************/
 
-import java.util.*;
+import java.util.NoSuchElementException;
 
 
 
@@ -380,7 +380,31 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 
 	// the key of rank k
 	public Key getValByRank(int k) {
-        /* TODO: Implement getValByRank here... */
+		if (k < 0)
+			return null;
+        return getValByRankKey(k, root, 0);
+	}
+	
+	private Key getValByRankKey(int k, Node element, int currentRank) {
+		if (element == null)
+			return null;
+		
+		int sizeOfLeft = size(element.left);
+		currentRank += sizeOfLeft;
+
+		// Inesrt Star Wars joke about "These aren't the nodes you're looking for..."
+		// If the rank is too large and we need to go left
+		if (currentRank > k) { 
+			currentRank -= sizeOfLeft;
+			return getValByRankKey(k, element.left, currentRank);
+		}
+		// If the rank isn't large enough and we move right
+		else if (currentRank < k) {
+			// Add 1 to account for this node, as it is by definition less than the key we're looking for
+			return getValByRankKey(k, element.right, currentRank + 1);
+		}
+		
+		return element.key;
 	}
 
 
