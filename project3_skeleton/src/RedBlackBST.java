@@ -7,6 +7,7 @@
  *
  *************************************************************************/
 
+import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
 
@@ -457,16 +458,96 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 	public int rangeCount(Key lo, Key hi) {
         return rank(hi) - rank(lo);
 	}
-
+	
     public Iterable<Key> kSmallest(int k){
-        /* TODO: Implement kSmallest here... */
-    	return null;
+        ArrayList<Key> list = new ArrayList<Key>();
+        list = kSmallest(k, root, list);
+    	return list;
+    }
+    
+    private ArrayList<Key> kSmallest(int k, Node node, ArrayList<Key> list) {
+    	if (k <= 0)
+    		return list;
+    	
+    	int sizeOfLeft = size(node.left);
+    	
+    	if (sizeOfLeft > k)
+    		return kSmallest(k, node.left, list);
+    	else if (sizeOfLeft < k) {
+    		addInOrder(node.left, list);
+    		list.add(node.key);
+    		return kSmallest(k - sizeOfLeft - 1, node.right, list);
+    	}
+    	
+    	// k == sizeOfLeft
+    	addInOrder(node.left, list);
+    	return list;
     }
 
     public Iterable<Key> kLargest(int k){
-        /* TODO: Implement kLargest here... */
-    	return null;
+    	ArrayList<Key> list = new ArrayList<Key>();
+        list = kLargest(k, root, list);
+    	return list;
     }
+    
+    private ArrayList<Key> kLargest(int k, Node node, ArrayList<Key> list) {
+    	if (k <= 0)
+    		return list;
+    	
+    	int sizeOfRight = size(node.right);
+    	
+    	if (sizeOfRight > k)
+    		return kLargest(k, node.right, list);
+    	else if (sizeOfRight < k) {
+    		addInOrder(node.right, list);
+    		list.add(0, node.key);
+    		// Perform this check so that if all the necessary elements have been added, we don't have
+    		// to deal with the overhead of using the extra array
+    		if (k - sizeOfRight - 1 <= 0)
+    			return list;
+    		
+    		// Use a separate list so that the correct order is maintained
+    		ArrayList<Key> leftElements = new ArrayList<Key>();
+    		leftElements = kLargest(k - sizeOfRight - 1, node.left, leftElements);
+    		leftElements.addAll(list);
+    		return leftElements;
+    	}
+    	
+    	addInOrder(node.right, list);
+    	return list;
+    }
+    
+    private void addInOrder(Node node, ArrayList<Key> list) {
+		if (node == null)
+			return;
+		
+		// Perform in-order traversal
+		addInOrder(node.left, list);
+		list.add(node.key);
+		addInOrder(node.right, list);
+	}
+    
+    public void printTree() {
+    	printTree(root);
+    }
+    
+    private void printTree(Node node) {
+    	printTree(node, 0);
+    	System.out.println();
+    }
+    
+    private void printTree(Node node, int linesToInsert) {
+    	if (node == null)
+    		return;
+    	
+    	for (int i = 0; i < linesToInsert; ++i)
+    		System.out.printf("-");
+    	System.out.printf("%s\n", node.key.toString());
+    	
+    	printTree(node.left, linesToInsert + 1);
+    	printTree(node.right, linesToInsert + 1);
+    }
+    
     
 	/*************************************************************************
 	 *  Check integrity of red-black BST data structure
