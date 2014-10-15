@@ -500,19 +500,22 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
     		return kLargest(k, node.right, list);
     	else if (sizeOfRight < k) {
     		addInOrder(node.right, list);
-    		list.add(0, node.key);
+    		list.add(node.key);
+    		return kLargest(k - sizeOfRight - 1, node.left, list);
+    		
     		// Perform this check so that if all the necessary elements have been added, we don't have
     		// to deal with the overhead of using the extra array
-    		if (k - sizeOfRight - 1 <= 0)
+    		/*if (k - sizeOfRight - 1 <= 0)
     			return list;
     		
     		// Use a separate list so that the correct order is maintained
     		ArrayList<Key> leftElements = new ArrayList<Key>();
     		leftElements = kLargest(k - sizeOfRight - 1, node.left, leftElements);
     		leftElements.addAll(list);
-    		return leftElements;
+    		return leftElements;*/
     	}
     	
+    	// k == sizeOfRight
     	addInOrder(node.right, list);
     	return list;
     }
