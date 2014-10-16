@@ -456,6 +456,8 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 
 	// number keys between lo and hi
 	public int rangeCount(Key lo, Key hi) {
+		if (hi.compareTo(lo) < 0)
+			return 0;
         return rank(hi) - rank(lo);
 	}
 	
