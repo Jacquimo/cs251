@@ -1,4 +1,6 @@
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Random;
 
 public class TestBST{
     
@@ -216,11 +218,11 @@ public class TestBST{
     	/* Test cases */
 
     	/* KLargest */
-    	rowFour = rowFour + testKLargest(rbt) + "\t|";
+    	rowFour = rowFour + testKSmallest(rbt) + "\t|";
     	
     	/* KSmallest */
         
-    	rowFour = rowFour + testKSmallest(rbt) + "\t|";
+    	rowFour = rowFour + testKLargest(rbt) + "\t|";
 
 
     	/* Range Count*/
