@@ -383,9 +383,35 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 	public Key getValByRank(int k) {
 		if (k < 0)
 			return null;
-        return getValByRankKey(k, root, 0);
+        //return getValByRankKey(k, root, 0);
+		return getNodeGivenRank(k, root, 0).key;
 	}
 	
+	// Recursively determines the node that has a specified rank
+	// Changed method so that it returns node instead of value so that this method can be used elsewhere
+	private Node getNodeGivenRank(int k, Node element, int currentRank) {
+		if (element == null)
+			return null;
+		
+		int sizeOfLeft = size(element.left);
+		currentRank += sizeOfLeft;
+		
+		// Inesrt Star Wars joke about "These aren't the nodes you're looking for..."
+		// If the rank is too large and we need to go left
+		if (currentRank > k) { 
+			currentRank -= sizeOfLeft;
+			return getNodeGivenRank(k, element.left, currentRank);
+		}
+		// If the rank isn't large enough and we move right
+		else if (currentRank < k) {
+			// Add 1 to account for this node, as it is by definition less than the key we're looking for
+			return getNodeGivenRank(k, element.right, currentRank + 1);
+		}
+		
+		return element;
+	}
+	
+	/*
 	private Key getValByRankKey(int k, Node element, int currentRank) {
 		if (element == null)
 			return null;
@@ -407,6 +433,7 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 		
 		return element.key;
 	}
+	*/
 
 
 	// number of keys less than key
@@ -477,7 +504,7 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 	}
 	
     public Iterable<Key> kSmallest(int k){
-        ArrayList<Key> list = new ArrayList<Key>();
+    	ArrayList<Key> list = new ArrayList<Key>();
         list = kSmallest(k, root, list);
     	return list;
     }
@@ -537,14 +564,15 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
     	return list;
     }
     
-    private void addInOrder(Node node, ArrayList<Key> list) {
+    private ArrayList<Key> addInOrder(Node node, ArrayList<Key> list) {
 		if (node == null)
-			return;
+			return list;
 		
 		// Perform in-order traversal
 		addInOrder(node.left, list);
 		list.add(node.key);
 		addInOrder(node.right, list);
+		return list;
 	}
     
     public void printTree() {
