@@ -483,14 +483,17 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 
 	// number keys between lo and hi
 	public int rangeCount(Key lo, Key hi) {
-		if (hi.compareTo(lo) < 0)
+		// If lo is greater than hi, there is no range
+		int cmp = hi.compareTo(lo);
+		if (cmp < 0)
 			return 0;
 		
+		/*
 		// The keys method returns all of the keys between lo and hi inclusive
 		// Therefore, we only need the number of keys
-		return ((Queue<Key>)keys(lo, hi)).size();
+		return ((Queue<Key>)keys(lo, hi)).size();*/
 		
-		/*
+		
 		// Perform this check because rank doesn't count the Key in the calculation
 		// Only need to check if it contains hi because lo would be counted in the call to rank(hi)
 		int includeHighNode = 0;
@@ -500,7 +503,7 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 		if (cmp == 0)
 			return includeHighNode;
 		
-        return includeHighNode + rank(hi) - rank(lo);*/
+        return includeHighNode + rank(hi) - rank(lo);
 	}
 	
     public Iterable<Key> kSmallest(int k){
