@@ -1,4 +1,6 @@
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Random;
 
 public class TestHashing{
     /*
@@ -149,7 +151,7 @@ public class TestHashing{
 
     public static void testall(){
 
-    	LinearProbingHashST<Integer, Integer> lphs = new LinearProbingHashST<Integer, Integer>();
+    	LinearProbingHashST<Integer, Integer> lphs = new LinearProbingHashST<Integer, Integer>(CAPACITY);
 
     	dataset = new int[2000];
 
