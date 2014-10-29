@@ -182,7 +182,7 @@ public class LinearProbingHashST<Key extends Comparable<Key>, Value>{
     	
     	// iterate over the rest of the table and use the max-heap to determine the k smallest elements
     	for (; i < keys.length; ++i) {
-    		if (keys[i] != null && keys[i].compareTo(maxOfKSmallest) <= 0) {
+    		if (keys[i] != null && keys[i].compareTo(maxOfKSmallest) < 0) {
     			maxheap.add(keys[i]);
     			maxOfKSmallest = maxheap.remove(); // delete the largest so that you still have k-smallest elements
     		}
@@ -192,8 +192,30 @@ public class LinearProbingHashST<Key extends Comparable<Key>, Value>{
     }
     
     public Iterable<Key> kLargest(int k){
-        /* TODO: Implement kLargest here... */
-    	return null;
+    	if (k <= 0) return new PriorityQueue<Key>();
+    	
+    	if (k > N) k = N;
+    	PriorityQueue<Key> minheap = new PriorityQueue<Key>(k + 1);
+    	
+    	// add k elements to the minheap
+    	int i = 0;
+    	for(; k > 0; ++i) {
+    		if (keys[i] != null) {
+    			minheap.add(keys[i]);
+    			--k;
+    		}
+    	}
+    	Key minOfKLargestKeys = minheap.peek();
+    	
+    	// iterate over the rest of the table and use the min-heap to determine the k largest elements
+    	for (; i < keys.length; ++i) {
+    		if (keys[i] != null && keys[i].compareTo(minOfKLargestKeys) > 0) {
+    			minheap.add(keys[i]);
+    			minOfKLargestKeys = minheap.remove(); // delete the smallest so that you still have k-largest elements
+    		}
+    	}
+    	
+    	return minheap;
     }
     
     // this seemed far to easy...
