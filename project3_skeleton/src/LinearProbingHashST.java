@@ -1,3 +1,6 @@
+import java.util.Collections;
+import java.util.PriorityQueue;
+
 /*************************************************************************
  *  Compilation:  javac LinearProbingHashST.java
  *  Execution:    java LinearProbingHashST
@@ -123,19 +126,41 @@ public class LinearProbingHashST<Key extends Comparable<Key>, Value>{
         	return 0;
     	
     	int numLess = 0; 
-    	int remainingElementsToCheck = N;
-        for (int i = 0; i < keys.length && remainingElementsToCheck > 0; ++i)
+        for (int i = 0; i < keys.length; ++i)
         	if (keys[i] != null) {
         		if (key.compareTo(keys[i]) > 0)
         			++numLess;
-        		--remainingElementsToCheck;
         	}
         return numLess;
     }
     
     public Key getValByRank(int k){
-        /* TODO: Implement getValByRank here... */
-    	return null;
+    	if (k < 0)
+    		return null;
+    	
+    	if (k > N - 1) k = N - 1; // account for k's that are larger than the possible amount of keys
+    	PriorityQueue<Key> maxheap = new PriorityQueue<Key>(k + 1, Collections.reverseOrder()); // a priority that is a max-heap
+    	
+    	int i = 0;
+    	// add the first k+1 elements to the priority queue
+    	for (; k + 1 > 0; ++i) {
+    		if (keys[i] != null) {
+    			maxheap.add(keys[i]);
+    			--k;
+    		}
+    	}
+    	// get the maximum element of the k+1 elements
+    	Key returnValKey = maxheap.remove();
+    	
+    	for (; i < keys.length; ++i) {
+    		// If the key is less than the key to return, update the key with rank(k)
+    		if (keys[i] != null && keys[i].compareTo(returnValKey) < 0) {
+    			maxheap.add(keys[i]);
+    			returnValKey = maxheap.remove();
+    		}
+    	}
+    	
+    	return returnValKey;
     }
     
     public Iterable<Key> kSmallest(int k){
