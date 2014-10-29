@@ -173,9 +173,25 @@ public class LinearProbingHashST<Key extends Comparable<Key>, Value>{
     	return null;
     }
     
+    // this seemed far to easy...
     public int rangeCount(Key low, Key high){
-        /* TODO: Implement rangeCount here... */
-    	return 1;
+        if (high.compareTo(low) < 0) 
+        	return 0;
+        if (high.compareTo(low) == 0) {
+        	if (contains(high)) // contains should run in O(1) time on average
+        		return 1;
+        	else
+				return 0;
+        }
+    
+        int range = 0;
+        for (int i = 0; i < keys.length; ++i) {
+        	// if not null check to see if range (inclusive)
+        	if (keys[i] != null && keys[i].compareTo(low) >= 0 && keys[i].compareTo(high) <= 0)
+        		++range;
+        }
+        
+        return range;
     }
     
     
