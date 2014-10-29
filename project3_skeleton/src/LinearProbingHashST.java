@@ -117,16 +117,15 @@ public class LinearProbingHashST<Key extends Comparable<Key>, Value>{
         return queue;
     }
     
+    // This seemed far too easy...
     public int rank(Key key){
         if (key == null)
         	return 0;
     	
-    	int numLess = 0;
-        
+    	int numLess = 0; 
         for (int i = 0; i < keys.length; ++i)
         	if (key.compareTo(keys[i]) > 0)
         		++numLess;
-        
         return numLess;
     }
     
