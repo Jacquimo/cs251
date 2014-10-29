@@ -163,9 +163,32 @@ public class LinearProbingHashST<Key extends Comparable<Key>, Value>{
     	return returnValKey;
     }
     
+    // ???question on whether k=0 should return an empty list???
     public Iterable<Key> kSmallest(int k){
-        /* TODO: Implement kSmallest here... */
-    	return null;
+    	if (k <= 0) return new PriorityQueue<Key>();
+    	
+    	if (k > N) k = N;
+    	PriorityQueue<Key> maxheap = new PriorityQueue<>(k + 1, Collections.reverseOrder());
+    	
+    	// add k elements to the maxheap
+    	int i = 0;
+    	for (; k > 0; ++i) {
+    		if (keys[i] != null) {
+    			maxheap.add(keys[i]);
+    			--k;
+    		}
+    	}
+    	Key maxOfKSmallest = maxheap.peek();
+    	
+    	// iterate over the rest of the table and use the max-heap to determine the k smallest elements
+    	for (; i < keys.length; ++i) {
+    		if (keys[i] != null && keys[i].compareTo(maxOfKSmallest) <= 0) {
+    			maxheap.add(keys[i]);
+    			maxOfKSmallest = maxheap.remove(); // delete the largest so that you still have k-smallest elements
+    		}
+    	}
+    	
+    	return maxheap;
     }
     
     public Iterable<Key> kLargest(int k){
