@@ -11,7 +11,6 @@
  *
  *
  *************************************************************************/
-import java.util.*;
 
 public class LinearProbingHashST<Key extends Comparable<Key>, Value>{
     private static final int INIT_CAPACITY = 22222223;
@@ -119,23 +118,36 @@ public class LinearProbingHashST<Key extends Comparable<Key>, Value>{
     }
     
     public int rank(Key key){
-        /* TODO: Implement rank here... */
+        if (key == null)
+        	return 0;
+    	
+    	int numLess = 0;
+        
+        for (int i = 0; i < keys.length; ++i)
+        	if (key.compareTo(keys[i]) > 0)
+        		++numLess;
+        
+        return numLess;
     }
     
     public Key getValByRank(int k){
         /* TODO: Implement getValByRank here... */
+    	return null;
     }
     
     public Iterable<Key> kSmallest(int k){
         /* TODO: Implement kSmallest here... */
+    	return null;
     }
     
     public Iterable<Key> kLargest(int k){
         /* TODO: Implement kLargest here... */
+    	return null;
     }
     
     public int rangeCount(Key low, Key high){
         /* TODO: Implement rangeCount here... */
+    	return 1;
     }
     
     

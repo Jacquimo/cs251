@@ -43,16 +43,17 @@ public class ManualTest{
                     lphs.rank(Integer.parseInt(a[++i]));
                 }
                 else if (a[i].equals("GetValByRank")){
-                    lphs.getValByRank(Integer.parseInt(a[++i]));
+                	System.out.println("" + lphs.getValByRank(Integer.parseInt(a[++i])));
+                    //System.out.println();
                 }
                 else if (a[i].equals("RangeCount")){
-                    lphs.rangeCount(Integer.parseInt(a[++i]),Integer.parseInt(a[++i]));
+                	System.out.println(lphs.rangeCount(Integer.parseInt(a[++i]),Integer.parseInt(a[++i])));
                 }
                 else if (a[i].equals("kSmallest")){
-                    lphs.kSmallest(Integer.parseInt(a[++i]));
+                	System.out.println(lphs.kSmallest(Integer.parseInt(a[++i])));
                 }
                 else if (a[i].equals("kLargest")){
-                    lphs.kLargest(Integer.parseInt(a[++i]));
+                	System.out.println(lphs.kLargest(Integer.parseInt(a[++i])));
                 }
             }
             return;
@@ -74,16 +75,16 @@ public class ManualTest{
                     rbt.rank(Integer.parseInt(a[++i]));
                 }
                 else if (a[i].equals("GetValByRank")){
-                    rbt.getValByRank(Integer.parseInt(a[++i]));
+                	System.out.println("GetValByRank: " + rbt.getValByRank(Integer.parseInt(a[++i])));
                 }
                 else if (a[i].equals("Count")){
-                    rbt.rangeCount(Integer.parseInt(a[++i]),Integer.parseInt(a[++i]));
+                	System.out.println("Count: " + rbt.rangeCount(Integer.parseInt(a[++i]),Integer.parseInt(a[++i])));
                 }
                 else if (a[i].equals("kSmallest")){
-                    rbt.kSmallest(Integer.parseInt(a[++i]));
+                	System.out.println("kSmallest: " + rbt.kSmallest(Integer.parseInt(a[++i])));
                 }
                 else if (a[i].equals("kLargest")){
-                    rbt.kLargest(Integer.parseInt(a[++i]));
+                	System.out.println("kLargest: " + rbt.kLargest(Integer.parseInt(a[++i])));
                 }
             }
             return;
