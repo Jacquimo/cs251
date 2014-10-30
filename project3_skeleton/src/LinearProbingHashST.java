@@ -127,7 +127,7 @@ public class LinearProbingHashST<Key extends Comparable<Key>, Value>{
         	return 0;
     	
     	int numLess = 0; 
-        for (int i = 0; i < keys.length; ++i)
+        for (int i = 0; i < M; ++i)
         	if (keys[i] != null) {
         		if (key.compareTo(keys[i]) > 0)
         			++numLess;
