@@ -246,7 +246,6 @@ public class LinearProbingHashST<Key extends Comparable<Key>, Value>{
     	return minheap;
     }
     
-    // this seemed far to easy...
     public int rangeCount(Key low, Key high){
         int cmp = high.compareTo(low);
     	if (cmp < 0) 
