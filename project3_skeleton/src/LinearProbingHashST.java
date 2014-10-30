@@ -28,7 +28,8 @@ public class LinearProbingHashST<Key extends Comparable<Key>, Value>{
     }
     
     // create linear proving hash table of given capacity
-    public LinearProbingHashST(int capacity) {
+    @SuppressWarnings("unchecked")
+	public LinearProbingHashST(int capacity) {
         M = capacity;
         keys = (Key[])   new Comparable[M];
         vals = (Value[]) new Object[M];
