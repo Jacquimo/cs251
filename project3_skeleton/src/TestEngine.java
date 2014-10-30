@@ -46,13 +46,13 @@ public class TestEngine{
             if (args.length == 9 && args[2].equals("-P"))  {
 
             	for (int i = 0; i < 6; i++){
-            		sum = sum + Double.parseDouble(args[3+i]);
+            		//sum = sum + Double.parseDouble(args[3+i]);
             		percentage[i] = Double.parseDouble(args[3+i]);
             	}
-            	if (sum != 100){
+            	/*if (sum != 100){
             		System.out.format("The total percentage should be 100\n");
             		return;
-            	}
+            	}*/
             	new TestBST(Integer.parseInt(args[1]), percentage);
             }
             else new TestBST(Integer.parseInt(args[1]));
