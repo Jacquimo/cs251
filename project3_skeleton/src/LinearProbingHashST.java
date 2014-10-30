@@ -221,9 +221,10 @@ public class LinearProbingHashST<Key extends Comparable<Key>, Value>{
     
     // this seemed far to easy...
     public int rangeCount(Key low, Key high){
-        if (high.compareTo(low) < 0) 
+        int cmp = high.compareTo(low);
+    	if (cmp < 0) 
         	return 0;
-        if (high.compareTo(low) == 0) {
+        if (cmp == 0) {
         	if (contains(high)) // contains should run in O(1) time on average
         		return 1;
         	else
