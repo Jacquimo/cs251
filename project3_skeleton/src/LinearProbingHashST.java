@@ -21,8 +21,6 @@ public class LinearProbingHashST<Key extends Comparable<Key>, Value>{
     private int M;           // size of linear probing table
     private Key[] keys;      // the keys
     private Value[] vals;    // the values
-    private int[] ranks;	 // the rank of an element at specified index. 0 value means not computed (b/c it's the default)
-    // and therefore the value -1 represents the actual value 0
     static double startTest, endTest;
     // create an empty hash table - use 16 as default size
     public LinearProbingHashST() {
@@ -35,7 +33,6 @@ public class LinearProbingHashST<Key extends Comparable<Key>, Value>{
         M = capacity;
         keys = (Key[])   new Comparable[M];
         vals = (Value[]) new Object[M];
-        ranks = new int[M];
     }
     
     // return the number of key-value pairs in the symbol table
@@ -106,12 +103,10 @@ public class LinearProbingHashST<Key extends Comparable<Key>, Value>{
             Value valToRehash = vals[i];
             keys[i] = null;
             vals[i] = null;
-            ranks[i] = 0; // update the ranks value to reflect that there is no key corresponding to that location
             N--;
             insert(keyToRehash, valToRehash);
             i = (i + 1) % M;
         }
-
         
         N--;
         
@@ -126,39 +121,17 @@ public class LinearProbingHashST<Key extends Comparable<Key>, Value>{
         return queue;
     }
     
+    // This seemed far too easy...
     public int rank(Key key){
         if (key == null)
         	return 0;
-        
-        // Get rank of a key from table if it has already been computed 
-        int k;
-        // Search for "key" in hash table
-        for (k = hash(key); keys[k] != null; k = (k + 1) % M) {
-            if (keys[k].equals(key))	break;
-        }
-        // If the rank has already been computed
-        if (keys[k] != null && ranks[k] != 0) { 
-        	int rank = ranks[k];
-        	if (rank < 0) ++rank; // handle case where the rank actually is 0
-        	return rank;
-        }
-
-        // Otherwise, the rank hasn't been computed for this key or this key isn't in the hash table
-        // Therefore, compute the rank
+    	
     	int numLess = 0; 
         for (int i = 0; i < M; ++i)
         	if (keys[i] != null) {
         		if (key.compareTo(keys[i]) > 0)
         			++numLess;
         	}
-        
-        // If the key is in the hash table, add the rank to our table
-        if (keys[k] != null) {
-        	int rank = numLess;
-        	if (rank == 0) rank = -1; // handle case where Rank is actually the value "0"
-        	ranks[k] = rank;
-        }
-        
         return numLess;
     }
     
