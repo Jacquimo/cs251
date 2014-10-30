@@ -231,7 +231,7 @@ public class LinearProbingHashST<Key extends Comparable<Key>, Value>{
         }
     
         int range = 0;
-        for (int i = 0; i < keys.length; ++i) {
+        for (int i = 0; i < M; ++i) {
         	// if not null check to see if range (inclusive)
         	if (keys[i] != null && keys[i].compareTo(low) >= 0 && keys[i].compareTo(high) <= 0)
         		++range;
