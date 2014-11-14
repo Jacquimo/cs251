@@ -6,7 +6,14 @@ package part1;
  *
  */
 public class Node {
-    /**
+    
+	private Node[] children;
+	
+	public Node(int numChildren) {
+		children = new Node[numChildren];
+	}
+	
+	/**
      * compute the size of the tree rooted at this node
      * @return number of nodes in the tree rooted at this node
      */

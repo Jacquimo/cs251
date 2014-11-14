@@ -12,7 +12,7 @@ import java.util.Scanner;
  *
  */
 public class Tree {
-    
+
 	private ArrayList<Node> adjacencyLS;
 	private Node root;
 	
@@ -27,22 +27,6 @@ public class Tree {
     public int size() {
         //TODO add your code here
         return 0;
-    }
-    
-    /**
-     * Setter method for root field
-     * @param node
-     */
-    public void setRoot(Node node) {
-    	this.root = node;
-    }
-    
-    /**
-     * Getter method for root field
-     * @return
-     */
-    public Node getRoot() {
-    	return this.root;
     }
 
     /**
@@ -59,15 +43,22 @@ public class Tree {
 			e.printStackTrace();
 		}
     	
+    	Tree tree = null;
+    	
     	// Parse first line (i.e. the size of the tree)
     	if (reader.hasNextLine()) {
     		String size = reader.nextLine();
-    		return new Tree(Integer.parseInt(size));
+    		tree = new Tree(Integer.parseInt(size));
+    	}
+    	
+    	if (reader.hasNextLine()) {
+    		String rootNode = reader.nextLine();
+    		String[] entrieStrings = rootNode.split(" ");
     	}
     	
     	// Parse all nodes and put their connections into the 
         
-        return null;
+        return tree;
     }
     /**
      * recursively compute the height of the tree
