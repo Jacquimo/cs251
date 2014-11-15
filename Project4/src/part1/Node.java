@@ -1,4 +1,7 @@
 package part1;
+
+import java.util.ArrayList;
+
 /**
  * 
  * @author TODO username
@@ -7,10 +10,13 @@ package part1;
  */
 public class Node {
     
-	private Node[] children;
+	protected int nodeNum;
+	protected ArrayList<Node> children;
+
 	
-	public Node(int numChildren) {
-		children = new Node[numChildren];
+	public Node(int nodeNumber) {
+		children = new ArrayList<Node>();
+		nodeNum = nodeNumber;
 	}
 	
 	/**
@@ -26,6 +32,6 @@ public class Node {
      * @param n
      */
     public void addChild(Node n) {
-        //TODO add your code here
+        children.add(n);
     }
 }

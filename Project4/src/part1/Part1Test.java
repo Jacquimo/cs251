@@ -12,7 +12,9 @@ public class Part1Test {
             Tree tree = Tree.readTreeFromFile(file);
             int height;
             height= Tree.iterativeHeight(tree);
+            System.out.println("Iterative height of tree = " + height);
             height= Tree.recursiveHeight(tree);
+            System.out.println("Recursive height of tree = " + height);
 
         }
         else{
