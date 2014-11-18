@@ -34,7 +34,7 @@ public class PebbleGame {
     	boolean[] pebbling = new boolean[t.allNodes.length];
     	pebbling = optimalPebbling(pebbling, peb, notpeb, root);
     	
-        return null;
+        return pebbling;
     }
     
     /**

@@ -46,7 +46,7 @@ public class Node {
 		
 		for (int i = 0; i < children.size(); ++i) {
 			Node child = children.get(i);
-			totalProfit += notpebbledProfit(peb, notpeb, this);
+			totalProfit += child.notpebbledProfit(peb, notpeb, this);
 		}
 		
 		//pebCalcsMade++;
@@ -68,8 +68,8 @@ public class Node {
 		
 		for (int i = 0; i < children.size(); ++i) {
 			Node child = children.get(i);
-			double pebProfit = pebbledProfit(peb, notpeb, this);
-			double notpebProfit = notpebbledProfit(peb, notpeb, this);
+			double pebProfit = child.pebbledProfit(peb, notpeb, this);
+			double notpebProfit = child.notpebbledProfit(peb, notpeb, this);
 			
 			if (pebProfit > notpebProfit)
 				totalProfit += pebProfit;
