@@ -4,13 +4,11 @@ import java.util.ArrayList;
 
 /**
  * 
- * @author TODO username
- * @version TODO date
+ * @author TODO ghousto
+ * @version TODO 11/18/14
  *
  */
 public class PebbleGame {
-    // TODO
-
 
     /**
      * compute optimal pebbling recursively
