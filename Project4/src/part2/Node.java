@@ -11,12 +11,16 @@ import java.util.ArrayList;
 public class Node {
     
 	protected int id;
-	protected boolean pebbled;
+	protected double profit;
 	protected ArrayList<Node> neighbors;
 	
 	public Node(int nodeID) {
+		this(nodeID, 0.0);
+	}
+	
+	public Node(int nodeID, double nodeProfit) {
 		id = nodeID;
-		pebbled = false;
+		profit = nodeProfit;
 		neighbors = new ArrayList<Node>();
 	}
 	

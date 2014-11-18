@@ -12,9 +12,8 @@ import java.util.Scanner;
  */
 public class Tree {
 	
-	private Node[] allNodes;
-	private int size;
-	protected boolean[] pebbling;
+	protected Node[] allNodes;
+	protected int size;
 	
 	public Tree(int numOfNodes) {
 		size = numOfNodes;
@@ -22,8 +21,6 @@ public class Tree {
 		// Initialize all the nodes up front
 		for (int i = 0; i < size; ++i)
 			allNodes[i] = new Node(i);
-		
-		pebbling = new boolean[numOfNodes]; // All values automatically false
 	}
 	
     /**
@@ -50,18 +47,20 @@ public class Tree {
     	}
     	
     	// Assume that the 0 element is the root
-    	tree.root = tree.allNodes[0];
+    	//tree.root = tree.allNodes[0];
     	
     	// Build all of the connections of the tree
     	while (reader.hasNextLine()) {
     		String parentLine = reader.nextLine();
     		String[] entryStrings = parentLine.split(" ");
+    		
     		// Get the parent node
     		int nodeNum = Integer.parseInt(entryStrings[0]); // assumes there is at least 1 node specified
     		Node parent = tree.allNodes[nodeNum];
+    		parent.profit = Integer.parseInt(entryStrings[1]); // assign the profit to the node
     		
     		// Parse all children and add them to the parent
-    		for (int i = 1; i < entryStrings.length; ++i) {
+    		for (int i = 2; i < entryStrings.length; ++i) {
     			int nodeID = Integer.parseInt(entryStrings[i]);
     			parent.addChild(tree.allNodes[nodeID]);
     		}

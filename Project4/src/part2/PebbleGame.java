@@ -45,7 +45,13 @@ public class PebbleGame {
      * @return the total profit of the pebbling.
      */
     public static double profit(Tree t, boolean[] pebble) {
-        //TODO add your code here
-        return 0;
+        double profit = 0.0;
+        
+        for (int i = 0; i < pebble.length; ++i)
+        	if (pebble[i]) {
+        		profit += t.allNodes[i].profit;
+        	}
+        
+        return profit;
     }
 }
