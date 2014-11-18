@@ -57,7 +57,7 @@ public class Tree {
     		// Get the parent node
     		int nodeNum = Integer.parseInt(entryStrings[0]); // assumes there is at least 1 node specified
     		Node parent = tree.allNodes[nodeNum];
-    		parent.profit = Integer.parseInt(entryStrings[1]); // assign the profit to the node
+    		parent.profit = Double.parseDouble(entryStrings[1]); // assign the profit to the node
     		
     		// Parse all children and add them to the parent
     		for (int i = 2; i < entryStrings.length; ++i) {
