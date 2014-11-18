@@ -5,11 +5,16 @@ import java.io.File;
 public class Part2Test {
 
     public static void main(String[] args) {
-        String fileName = args[0];
+        /*String fileName = args[0];
         if(fileName!=null&&!"".equals(fileName)){
+    		int i = -1;*/
+    	
+    	for (int i = 1; i <= 25; ++i) {
+    		String fileName = "./freeTrees/freeTree_" + i + ".txt";
 
             File file = new File(fileName);
             Tree tree = Tree.readTreeFromFile(file);
+            System.out.printf("Testing with %d nodes\n", i);
             
             // Brute Force Testing
             boolean [] pebbelingBruteForce = PebbleGame.bruteForceOptimalPebbling(tree);
@@ -26,10 +31,15 @@ public class Part2Test {
             else
             	System.out.println("Recursive pebbling is NOT valid");
             System.out.printf("Recursive max profit = %.2f\n", PebbleGame.profit(tree, pebbelingRecursive));
-        }
+            
+            System.out.println();
+            System.out.flush();
+    	}
+            
+        /*}
         else{
             System.err.println("Missing inputfile argument");
-        }
+        }*/
 
 
     }
