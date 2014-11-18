@@ -14,7 +14,7 @@ public class Tree {
 	
 	private Node[] allNodes;
 	private int size;
-	protected Boolean[] pebbling;
+	protected boolean[] pebbling;
 	
 	public Tree(int numOfNodes) {
 		size = numOfNodes;
@@ -23,7 +23,7 @@ public class Tree {
 		for (int i = 0; i < size; ++i)
 			allNodes[i] = new Node(i);
 		
-		pebbling = new Boolean[numOfNodes];
+		pebbling = new boolean[numOfNodes]; // All values automatically false
 	}
 	
     /**
@@ -67,6 +67,7 @@ public class Tree {
     		}
     	}
         
+    	reader.close();
         return tree;
     }
 }

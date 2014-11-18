@@ -1,12 +1,26 @@
 package part2;
+
+import java.util.ArrayList;
+
 /**
  * 
- * @author TODO username
- * @version TODO date
+ * @author TODO ghousto
+ * @version TODO 11/18/14
  *
  */
 public class Node {
-    /**
+    
+	protected int id;
+	protected boolean pebbled;
+	protected ArrayList<Node> neighbors;
+	
+	public Node(int nodeID) {
+		id = nodeID;
+		pebbled = false;
+		neighbors = new ArrayList<Node>();
+	}
+	
+	/**
      * compute the size of the tree rooted at this node
      * @return number of nodes in the tree rooted at this node
      */
@@ -19,6 +33,6 @@ public class Node {
      * @param n
      */
     public void addChild(Node n) {
-        //TODO add your code here
+        neighbors.add(n);
     }
 }
