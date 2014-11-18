@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 /**
  * 
- * @author TODO ghousto
- * @version TODO 11/18/14
+ * @author ghousto
+ * @version 11/18/14
  *
  */
 public class Node {
