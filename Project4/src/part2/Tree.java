@@ -14,6 +14,7 @@ public class Tree {
 	
 	protected Node[] allNodes;
 	protected int size;
+	protected Node root;
 	
 	public Tree(int numOfNodes) {
 		size = numOfNodes;
@@ -21,6 +22,7 @@ public class Tree {
 		// Initialize all the nodes up front
 		for (int i = 0; i < size; ++i)
 			allNodes[i] = new Node(i);
+		root = null;
 	}
 	
     /**

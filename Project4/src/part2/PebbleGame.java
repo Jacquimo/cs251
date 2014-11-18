@@ -1,6 +1,9 @@
 package part2;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Random;
 
 /**
  * 
@@ -16,9 +19,58 @@ public class PebbleGame {
      * @return optimal pebbling of tree rooted at given node
      */
     public static boolean[] recursiveOptimalPebbling(Tree t) {
-        //TODO add your code here
+    	// Randomly select a root node if one hasn't been selected elsewhere
+    	if (t.root == null)
+    		t.root = t.allNodes[(new Random()).nextInt(t.allNodes.length)];
+    	
+    	Node root = t.root;
+    	double[] peb = new double[t.allNodes.length];
+    	double[] notpeb = new double[t.allNodes.length];
+    	
+    	// Because of recursion, these 2 calls should fill every single entry in the pebbled and not-pebbled arrays
+    	root.pebbledProfit(peb, notpeb, root);
+    	root.notpebbledProfit(peb, notpeb, root);
+    	
+    	boolean[] pebbling = new boolean[t.allNodes.length];
+    	pebbling = optimalPebbling(pebbling, peb, notpeb, root);
+    	
         return null;
     }
+    
+    /**
+     * Given precalculated pebbled and not-pebbled profit arrays, use a BFS traversal to determine optimal pebbling of nodes
+     * @param pebbling - boolean array containing whether a node is pebbled or not
+     * @param peb - array containing the optimal profits if each node is pebbled
+     * @param notpeb - array containing the optimal profits if each node isn't pebbled
+     * @param root - the root node of the tree
+     * @return
+     */
+    private static boolean[] optimalPebbling(boolean[] pebbling, double[] peb, double[] notpeb, Node root) {
+    	if (root == null)
+    		return pebbling;
+    	
+    	Queue<Node> bfsNodes = new LinkedList<Node>();
+    	bfsNodes.add(root);
+    	
+    	while (!bfsNodes.isEmpty()) {
+    		Node node = bfsNodes.remove();
+    		ArrayList<Node> children = node.children;
+    		
+    		// If not-pebbling and pebbling have equal profits, the default behavior is to not pebble
+    		if (notpeb[node.id] > peb[node.id])
+    			bfsNodes.addAll(children);
+    		else {
+    			pebbling[node.id] = true;
+    			// To skip chilren check (and default make them not-pebbled) add the children's children to BFS
+    			for (int i = 0; i < children.size(); ++i)
+    				bfsNodes.addAll(children.get(i).children);
+    		}
+    		
+    	}
+    	
+    	return pebbling;
+    }
+    
     /**
      * use brute force to find optimal pebbling
      * uses bit-shifting and bit-masking to attain best performance since this performance will be awful already
