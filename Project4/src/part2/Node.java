@@ -9,10 +9,7 @@ import java.util.ArrayList;
  *
  */
 public class Node {
-    
-	//public static int pebCalcsMade = 0;
-	//public static int notpebCalcsMade = 0;
-	
+
 	protected int id;
 	protected double profit;
 	protected ArrayList<Node> neighbors;
@@ -49,7 +46,6 @@ public class Node {
 			totalProfit += child.notpebbledProfit(peb, notpeb, this);
 		}
 		
-		//pebCalcsMade++;
 		peb[id] = totalProfit;
 		return totalProfit;
 	}
@@ -77,7 +73,6 @@ public class Node {
 				totalProfit += notpebProfit;
 		}
 		
-		//notpebCalcsMade++;
 		notpeb[id] = totalProfit;
 		return totalProfit;
 	}
