@@ -1,5 +1,6 @@
 package part2;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -79,17 +80,24 @@ public class PebbleGame {
      */
     public static boolean[] bruteForceOptimalPebbling(Tree t) {
     	// This will only work for up to 63 nodes because of the limit of the long data type (i.e. overflow)
-
-    	long outerBound = 1 << t.allNodes.length; // 2^n
+    	//long outerBound = 1 << t.allNodes.length; // 2^n
+    	
+    	// Use BigInteger class to get 2^n w/ 1 extra high-order bit so that it's not negative
+    	BigInteger outerBound = BigInteger.valueOf(3 << (t.allNodes.length + 1)); // use decimal 3 so that I get 1 more bit field than I need
+    	outerBound = outerBound.xor(BigInteger.valueOf(1 << (t.allNodes.length + 1))); // clear high-order bit so that number isn't negative
     	boolean[] bestPebbling = null;
     	double maxProfit = -1.0;
+    	BigInteger bigZero = BigInteger.valueOf(0);
+    	BigInteger bigOne = BigInteger.valueOf(1);
     	
-        for (long i = 1; i < Math.abs(outerBound); ++i) { // loop of bit-pebbling values
+    	// loop of bit-pebbling values
+        for (BigInteger i = BigInteger.valueOf(1); outerBound.compareTo(i) > 0; i = i.add(bigOne)) {
         	boolean[] pebbling = new boolean[t.allNodes.length];
         	
         	// Build the pebbling array from the bits in the counter 'i'
         	for (int j = 0; j < t.allNodes.length; ++j) {
-        		boolean shouldPebble = ((1 << j) & i) != 0;
+        		//boolean shouldPebble = ((1 << j) & i) != 0;
+        		boolean shouldPebble = i.and(BigInteger.valueOf(1 << j)).compareTo(bigZero) != 0;
         		if (shouldPebble)
         			pebbling[j] = true;
         	}
