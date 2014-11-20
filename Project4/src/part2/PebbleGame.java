@@ -9,7 +9,7 @@ import java.util.Random;
 /**
  * 
  * @author ghousto
- * @version 11/18/14
+ * @version 11/20/14
  *
  */
 public class PebbleGame {
