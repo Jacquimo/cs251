@@ -9,7 +9,7 @@ public class Part2Test {
         if(fileName!=null&&!"".equals(fileName)){
     		int i = -1;*/
     	
-    	for (int i = 1; i <= 30; ++i) {
+    	for (int i = 1; i <= 26; ++i) {
     		String fileName = "./freeTrees/freeTree_" + i + ".txt";
 
             File file = new File(fileName);
@@ -27,7 +27,7 @@ public class Part2Test {
     	}
     	
     	// Only recursive testing, as it would take far too long with the brute force solution
-    	int[] testFiles = {/*26, 27, 28, 29, 30,*/ 50, 75, 100, 150, 200, 250, 500};
+    	int[] testFiles = {/*26,*/ 27, 28, 29, 30, 50, 75, 100, 150, 200, 250, 500};
     	for (int i = 0; i < testFiles.length; ++i) {
     		String fileName = "./freeTrees/freeTree_" + testFiles[i] + ".txt";
 
