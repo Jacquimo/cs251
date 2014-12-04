@@ -51,7 +51,11 @@ public class DagUtilities {
      * @return length of the longest path
      */
     public static int longestPath(Digraph G) {
-        // Get topological sorting to use during weight relaxation
+        // If the longest paths have already been computed, just return the longest path to the sink
+    	if (G.longPaths != null)
+        	return G.longPaths[G.topSort[G.topSort.length - 1].id];
+    	
+    	// Get topological sorting to use during weight relaxation
     	Node[] topSort;
         if (G.topSort[0] == null)
         	DagUtilities.topologicalSort(G);
@@ -72,6 +76,7 @@ public class DagUtilities {
         }
     	
         G.longPaths = longPaths;
+        // return the longest path to the sink (the last node in the topological sort), since there is guaranteed to only be 1 sink in the graph
         return longPaths[topSort[topSort.length - 1].id];
     }
 
