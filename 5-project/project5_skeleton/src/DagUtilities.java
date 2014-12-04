@@ -51,13 +51,11 @@ public class DagUtilities {
      * @return length of the longest path
      */
     public static int longestPath(Digraph G) {
-        // Get topological sorting to 
+        // Get topological sorting to use during weight relaxation
     	Node[] topSort;
         if (G.topSort[0] == null)
         	DagUtilities.topologicalSort(G);
         topSort = G.topSort;
-        
-        int longest = -1;
         int[] longPaths = new int[G.v];
         
         for (int i = 0; i < topSort.length; ++i) {
@@ -69,14 +67,12 @@ public class DagUtilities {
         		Node child = current.children.get(j);
         		if (relaxWeight > longPaths[child.id]) {
         			longPaths[child.id] = relaxWeight;
-        			if (relaxWeight > longest)
-        				longest = relaxWeight;
         		}
         	}
         }
     	
         G.longPaths = longPaths;
-    	return longest;
+        return longPaths[topSort[topSort.length - 1].id];
     }
 
     /**
