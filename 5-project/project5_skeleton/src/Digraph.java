@@ -24,7 +24,7 @@ public class Digraph
 		sources = new LinkedList<Node>();
 		in_degs = new int[v];
 		sink = null;
-		topSort = new Node[v];
+		topSort = null;
 		longPaths = null;
 		
 		// Make the adjacency list and create all the Node objects

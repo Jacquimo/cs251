@@ -14,31 +14,41 @@ public class DagUtilities {
      */
     public static int[] topologicalSort(Digraph G) {
         int[] top = new int[G.v];
-        int count = 0;
-        Queue<Node> src = (Queue<Node>)((LinkedList<Node>) G.sources).clone();
     	
-        while (src.size() > 0) {
-        	int numSrc = src.size();
-        	for (int i = 0; i < numSrc; ++i) {
-        		// Update topological sort number for source
-        		Node source = src.remove();
-        		top[source.id] = count;
-        		G.topSort[count] = source;
-        		++count;
-        		
-        		// reset in-degrees array so that it can be used again (in other functions)
-				// thereby, when the function ends, the graph will end exactly in the same state it began
-				G.in_degs[source.id] = source.parents.size(); 
-        		
-        		// Loop over children to adjust in-degree values and update sources queue
-        		for (int j = 0; j < source.children.size(); ++j) {
-        			Node child = source.children.get(j);
-        			G.in_degs[child.id]--;
-        			if (G.in_degs[child.id] <= 0)
-        				src.add(child);
-        		}
-        	}
-        }
+    	if (G.topSort == null) {
+    		int count = 0;
+    		Queue<Node> src = (Queue<Node>)((LinkedList<Node>) G.sources).clone();
+    		Node[] topSort = new Node[G.v];
+    		G.topSort = topSort;
+    	
+    		while (src.size() > 0) {
+    			int numSrc = src.size();
+    			for (int i = 0; i < numSrc; ++i) {
+    				// Update topological sort number for source
+    				Node source = src.remove();
+    				top[source.id] = count;
+    				G.topSort[count] = source;
+    				++count;
+    				
+    				// reset in-degrees array so that it can be used again (in other functions)
+    				// thereby, when the function ends, the graph will end exactly in the same state it began
+    				G.in_degs[source.id] = source.parents.size(); 
+    				
+    				// Loop over children to adjust in-degree values and update sources queue
+    				for (int j = 0; j < source.children.size(); ++j) {
+    					Node child = source.children.get(j);
+    					G.in_degs[child.id]--;
+    					if (G.in_degs[child.id] <= 0)
+    						src.add(child);
+    				}
+    			}
+    		}
+    	}
+    	else {
+    		for (int k = 0; k < G.topSort.length; ++k) {
+    			top[G.topSort[k].id] = k;
+    		}
+    	}
         
         return top;
     }
