@@ -15,6 +15,8 @@ public class Digraph
 	protected Queue<Node> sources;
 	protected int[] in_degs;
 	protected Node sink;
+	protected Node[] topSort;
+	protected int[] longPaths;
 	
 	public Digraph(int n, int m) {
 		v = n;
@@ -22,6 +24,8 @@ public class Digraph
 		sources = new LinkedList<Node>();
 		in_degs = new int[v];
 		sink = null;
+		topSort = new Node[v];
+		longPaths = null;
 		
 		// Make the adjacency list and create all the Node objects
 		adj = new Node[v];

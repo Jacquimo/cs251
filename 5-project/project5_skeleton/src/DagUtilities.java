@@ -23,6 +23,7 @@ public class DagUtilities {
         		// Update topological sort number for source
         		Node source = src.remove();
         		top[source.id] = count;
+        		G.topSort[count] = source;
         		++count;
         		
         		// reset in-degrees array so that it can be used again (in other functions)
@@ -50,7 +51,32 @@ public class DagUtilities {
      * @return length of the longest path
      */
     public static int longestPath(Digraph G) {
-        return -1;
+        // Get topological sorting to 
+    	Node[] topSort;
+        if (G.topSort[0] == null)
+        	DagUtilities.topologicalSort(G);
+        topSort = G.topSort;
+        
+        int longest = -1;
+        int[] longPaths = new int[G.v];
+        
+        for (int i = 0; i < topSort.length; ++i) {
+        	Node current = topSort[i];
+        	int relaxWeight = longPaths[current.id] + 1;
+        	
+        	// Relax the distance to all child vertices as appropriate
+        	for (int j = 0; j < current.children.size(); ++j) {
+        		Node child = current.children.get(j);
+        		if (relaxWeight > longPaths[child.id]) {
+        			longPaths[child.id] = relaxWeight;
+        			if (relaxWeight > longest)
+        				longest = relaxWeight;
+        		}
+        	}
+        }
+    	
+        G.longPaths = longPaths;
+    	return longest;
     }
 
     /**
