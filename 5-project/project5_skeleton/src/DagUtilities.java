@@ -134,6 +134,9 @@ public class DagUtilities {
         		//node.out_deg++;
         	}
         	parser.close();
+        	
+        	if (node.children.size() <= 0)
+        		graph.sink = node;
         }
     	
     	reader.close();
