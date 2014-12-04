@@ -1,5 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Scanner;
 
 public class DagUtilities {
@@ -11,8 +13,33 @@ public class DagUtilities {
      * @return an array containing the topological numbers of each vertex in graph G
      */
     public static int[] topologicalSort(Digraph G) {
-        // TODO add your code here
-        return null;
+        int[] top = new int[G.v];
+        int count = 0;
+        Queue<Node> src = (Queue<Node>)((LinkedList<Node>) G.sources).clone();
+    	
+        while (src.size() > 0) {
+        	int numSrc = src.size();
+        	for (int i = 0; i < numSrc; ++i) {
+        		// Update topological sort number for source
+        		Node source = src.remove();
+        		top[source.id] = count;
+        		++count;
+        		
+        		// Loop over children to adjust in-degree values and update sources queue
+        		for (int j = 0; j < source.children.size(); ++j) {
+        			Node child = source.children.get(j);
+        			G.in_degs[child.id]--;
+        			if (G.in_degs[child.id] <= 0) {
+        				src.add(child);
+        				// reset in-degrees according to the graph so that it can be used again (in other functions)
+        				// thereby, when the function ends, the graph will end exactly in the same state it began
+        				G.in_degs[child.id] = child.parents.size(); 
+        			}
+        		}
+        	}
+        }
+        
+        return top;
     }
 
     /**
@@ -87,13 +114,15 @@ public class DagUtilities {
         	Scanner parser = new Scanner(reader.nextLine());
         	parser.next();
         	while (parser.hasNextInt()) {
-        		//Node parent = graph.adj[parser.nextInt()];
-        		parser.nextInt();
-        		node.in_deg++;
+        		Node parent = graph.adj[parser.nextInt()];
+        		//parser.nextInt();
+        		//node.in_deg++;
+        		node.parents.add(parent);
         	}
         	parser.close();
         	
-        	if (node.in_deg == 0)
+        	graph.in_degs[node.id] = node.parents.size();
+        	if (node.parents.size() == 0)
         		graph.sources.add(node);
         	
         	// Update adjacency list for children (Out) and the respective in-degree and out-degree of the respective nodes
@@ -102,10 +131,11 @@ public class DagUtilities {
         	while (parser.hasNextInt()) {
         		Node child = graph.adj[parser.nextInt()];
         		node.children.add(child);
-        		node.out_deg++;
+        		//node.out_deg++;
         	}
         	parser.close();
-        		
+        	
+        	//graph.out_degs[node.id] = node.children.size();
         }
     	
     	reader.close();

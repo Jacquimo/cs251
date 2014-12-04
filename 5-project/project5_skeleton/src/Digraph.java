@@ -13,11 +13,15 @@ public class Digraph
 	protected int v; // the number of vertices
 	protected int e; // the number of edges
 	protected Queue<Node> sources;
+	protected int[] in_degs;
+	//protected int[] out_degs;
 	
 	public Digraph(int n, int m) {
 		v = n;
 		e = m;
 		sources = new LinkedList<Node>();
+		in_degs = new int[v];
+		//out_degs = new int[v];
 		
 		// Make the adjacency list and create all the Node objects
 		adj = new Node[v];
