@@ -8,8 +8,6 @@ public class Node {
 	
 	public Node(int id) {
 		this.id = id;
-		//out_deg = 0;
-		//in_deg = 0;
 		children = new ArrayList<Node>();
 		parents = new ArrayList<Node>();
 	}

@@ -25,16 +25,16 @@ public class DagUtilities {
         		top[source.id] = count;
         		++count;
         		
+        		// reset in-degrees array so that it can be used again (in other functions)
+				// thereby, when the function ends, the graph will end exactly in the same state it began
+				G.in_degs[source.id] = source.parents.size(); 
+        		
         		// Loop over children to adjust in-degree values and update sources queue
         		for (int j = 0; j < source.children.size(); ++j) {
         			Node child = source.children.get(j);
         			G.in_degs[child.id]--;
-        			if (G.in_degs[child.id] <= 0) {
+        			if (G.in_degs[child.id] <= 0)
         				src.add(child);
-        				// reset in-degrees according to the graph so that it can be used again (in other functions)
-        				// thereby, when the function ends, the graph will end exactly in the same state it began
-        				G.in_degs[child.id] = child.parents.size(); 
-        			}
         		}
         	}
         }
@@ -134,8 +134,6 @@ public class DagUtilities {
         		//node.out_deg++;
         	}
         	parser.close();
-        	
-        	//graph.out_degs[node.id] = node.children.size();
         }
     	
     	reader.close();
