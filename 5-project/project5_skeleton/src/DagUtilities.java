@@ -153,18 +153,57 @@ public class DagUtilities {
      * @param the number of stations k
      * @return a schedule
      */
-    public static Schedule spanKStations(Digraph G, int k) {
-    	Schedule sch = null;
+    public static Schedule spanKStations(Digraph G, int k) {    	
+    	
+    	if (k == 1)
+    		return retTopSortSchedule(G);
+    	
+    	if (G.topSort == null)
+    		topologicalSort(G);
+    	
     	Node[] top = G.topSort;
+    	int stationsUsed[] = new int[top.length - 1]; // The number 'm' stations in use at a certain level/time step, where m < k
+    	int largestParentLevel[] = new int[top.length];
+    	int step[] = new int[top.length]; // the step at which a specified node is executed
     	
-    	// Set the span to be the longest path to the sink + 1
-    	if (G.longPaths == null)
-        	sch = new Schedule(longestPath(G) + 1);
-    	else
-    		sch = new Schedule(G.longPaths[top[top.length - 1].id] + 1);
+    	for (int i = 0; i < top.length; ++i) {
+    		Node node = top[i];
+    		
+    		// Determine step to place node at based on parent step and if current steps are full
+    		int level = largestParentLevel[node.id] + 1;
+    		if (node.parents.isEmpty())
+    			level = 0;
+    		
+    		while (stationsUsed[level] >= k)
+    			++level;
+    		//sch.addToSchedule(level, node.id);
+    		step[node.id] = level;
+    		stationsUsed[level]++;
+    		
+    		// Update largestParentLevel values for the children
+    		for (int j = 0; j < node.children.size(); ++j) {
+    			Node child = node.children.get(j);
+    			if (largestParentLevel[child.id] < level)
+    				largestParentLevel[child.id] = level;
+    		}
+    	}
     	
+    	// Create a schedule with enough steps to accomodate the sink node
+    	Schedule sch = new Schedule(step[top[top.length - 1].id] + 1);
+    	for (int i = 0; i < step.length; ++i)
+    		sch.addToSchedule(step[i], i);
     	
         return sch;
+    }
+    
+    private static Schedule retTopSortSchedule(Digraph G) {
+    	Schedule schedule = new Schedule(G.v);
+    	Node top[] = G.topSort;
+    	
+    	for (int i = 0; i < top.length; ++i)
+    		schedule.addToSchedule(i, top[i].id);
+    	
+    	return schedule;
     }
 
     /**

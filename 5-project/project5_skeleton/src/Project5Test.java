@@ -33,7 +33,7 @@ public class Project5Test {
             int[] graphTopoSort = DagUtilities.topologicalSort(graph);
             
             int length = DagUtilities.longestPath(graph);
-            System.out.printf("Longest Path = %d\n\n", length);
+            System.out.printf("Longest Path = %d\n", length);
             
             Schedule schedule;
 
@@ -43,18 +43,6 @@ public class Project5Test {
             else{
                 schedule = DagUtilities.spanKStations(graph, stations);
             }
-            
-            /// My Code ///
-            for (int i = 0; i < schedule.getProductionSpan(); ++i) {
-            	ArrayList<Integer> step = schedule.getSchedule(i);
-            	System.out.printf("Step %d: ", i + 1);
-            	
-            	for (int j = 0; j < step.size(); ++j) 
-            		System.out.printf("%d ", step.get(j));
-
-            	System.out.println();
-            }
-            /// My Code ///
             
             System.out.println("----------------- Results ------------------");
             int spanlength = schedule.getProductionSpan();
