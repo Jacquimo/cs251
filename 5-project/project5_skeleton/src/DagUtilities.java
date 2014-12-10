@@ -176,7 +176,6 @@ public class DagUtilities {
     		
     		while (stationsUsed[level] >= k)
     			++level;
-    		//sch.addToSchedule(level, node.id);
     		step[node.id] = level;
     		stationsUsed[level]++;
     		
