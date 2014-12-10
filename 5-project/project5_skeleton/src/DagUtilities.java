@@ -92,15 +92,58 @@ public class DagUtilities {
 
     /**
      * Task 3
-     * This fundtion  generates a schedule that completes all manufacturing steps in the shortest
+     * This function  generates a schedule that completes all manufacturing steps in the shortest
      * production span.
      * 
      * @param dag G
      * @return a schedule
      */
     public static Schedule minProdSpanSchedule(Digraph G) {
-        //TODO add your code here
-        return null;
+    	Schedule sch = null;
+    	Node[] top = G.topSort;
+    	
+    	// Set the span to be the longest path to the sink + 1
+    	if (G.longPaths == null)
+        	sch = new Schedule(longestPath(G) + 1);
+    	else
+    		sch = new Schedule(G.longPaths[top[top.length - 1].id] + 1);
+    	
+    	Queue<Node> bfs = new LinkedList<Node>();
+    	int[] parentsRemoved = new int[top.length];
+    	
+    	// Add all of the sources to the BFS queue
+    	// Sources will be the first 'k' nodes in the topological sort without parents, where k <= n - 1 (as there must always be 1 sink)
+    	for (int i = 0; i < top.length && top[i].parents.isEmpty(); ++i) {
+    		bfs.add(top[i]);
+    	}
+    	
+    	// Perform the BFS traversal of the graph
+    	
+    	int step = 0;
+    	while (!bfs.isEmpty()) {
+    		int sizeOfStep = bfs.size();
+    		
+    		// Add the nodes to the schedule and update the BFS queue with the node's children
+    		for (int j = 0; j < sizeOfStep; ++j) {
+    			Node node = bfs.remove();
+    			sch.addToSchedule(step, node.id);
+    			
+    			// Update BFS queue with children as appropriate
+    			for (int k = 0; k < node.children.size(); ++k) {
+    				Node child = node.children.get(k);
+    				
+    				parentsRemoved[child.id]--;
+    				
+    				// If all of the parent tasks are scheduled to be deleted, then this task can be completed
+    				if (parentsRemoved[child.id] * -1 >= child.parents.size())
+    					bfs.add(child);
+    			}
+    		}
+    		
+    		++step;
+    	}
+        
+        return sch;
     }
 
     /**

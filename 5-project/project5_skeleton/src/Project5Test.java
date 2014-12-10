@@ -24,13 +24,16 @@ public class Project5Test {
         
         if (fileName != null && !"".equals(fileName)) {
 
-           File file = new File(fileName);
+        	System.out.printf("File Name = %s\n\n", fileName);
+        	
+        	File file = new File(fileName);
             
             Digraph graph = DagUtilities.readGraphFromFile(file);
             
             int[] graphTopoSort = DagUtilities.topologicalSort(graph);
             
             int length = DagUtilities.longestPath(graph);
+            System.out.printf("Longest Path = %d\n\n", length);
             
             Schedule schedule;
 
@@ -40,6 +43,18 @@ public class Project5Test {
             else{
                 schedule = DagUtilities.spanKStations(graph, stations);
             }
+            
+            /// My Code ///
+            for (int i = 0; i < schedule.getProductionSpan(); ++i) {
+            	ArrayList<Integer> step = schedule.getSchedule(i);
+            	System.out.printf("Step %d: ", i + 1);
+            	
+            	for (int j = 0; j < step.size(); ++j) 
+            		System.out.printf("%d ", step.get(j));
+
+            	System.out.println();
+            }
+            /// My Code ///
             
             System.out.println("----------------- Results ------------------");
             int spanlength = schedule.getProductionSpan();
