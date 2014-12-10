@@ -154,8 +154,17 @@ public class DagUtilities {
      * @return a schedule
      */
     public static Schedule spanKStations(Digraph G, int k) {
-        //TODO add your code here
-        return null;
+    	Schedule sch = null;
+    	Node[] top = G.topSort;
+    	
+    	// Set the span to be the longest path to the sink + 1
+    	if (G.longPaths == null)
+        	sch = new Schedule(longestPath(G) + 1);
+    	else
+    		sch = new Schedule(G.longPaths[top[top.length - 1].id] + 1);
+    	
+    	
+        return sch;
     }
 
     /**
