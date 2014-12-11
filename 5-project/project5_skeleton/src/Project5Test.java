@@ -1,4 +1,5 @@
 import java.io.File;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 /** @author: CS251TAGroup
@@ -63,6 +64,29 @@ public class Project5Test {
                     System.out.println();
                 }
             }
+            
+            
+            
+            File test = new File("./project5_skeleton/dags/400v850e.txt");
+            Digraph outGraph = DagUtilities.readGraphFromFile(test);
+            PrintWriter write = null;
+            
+            try {
+            	write = new PrintWriter("./output.txt", "UTF-8");
+            }
+            catch (Exception e) {
+            	e.printStackTrace();
+            }
+            
+            DagUtilities.topologicalSort(outGraph);
+            DagUtilities.longestPath(outGraph);
+            
+            for (int k = 1; k < 100; ++k) {
+            	int prodSpan = DagUtilities.spanKStations(outGraph, k).getProductionSpan();
+            	write.printf("%d\t", prodSpan);
+            }
+            write.println();
+            write.close();
         }
         else {
             System.err.println("Missing inputfile argument");
