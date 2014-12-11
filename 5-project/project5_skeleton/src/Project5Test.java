@@ -81,9 +81,10 @@ public class Project5Test {
             DagUtilities.topologicalSort(outGraph);
             DagUtilities.longestPath(outGraph);
             
+            write.println("k\tspan");
             for (int k = 1; k < 100; ++k) {
             	int prodSpan = DagUtilities.spanKStations(outGraph, k).getProductionSpan();
-            	write.printf("%d\t", prodSpan);
+            	write.printf("%d\t%d\n", k, prodSpan);
             }
             write.println();
             write.close();
